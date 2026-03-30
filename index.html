@@ -75,7 +75,7 @@ textarea{resize:vertical;min-height:80px;}
 .prod-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:.15s;position:relative;}
 .prod-card:hover{border-color:var(--blue-2);box-shadow:0 4px 12px rgba(27,95,168,.12);}
 .prod-card.has-qty{border-color:var(--blue);background:var(--blue-light);}
-.prod-img{width:100%;height:90px;object-fit:cover;background:#F8FAFC;}
+.prod-img{width:100%;height:90px;object-fit:contain;background:#F8FAFC;padding:6px;}
 .prod-name{font-size:11px;font-weight:500;padding:7px 8px 4px;line-height:1.35;min-height:36px;color:var(--text);}
 .qty-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px 9px;}
 .qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text);transition:.1s;line-height:1;}
@@ -311,43 +311,44 @@ const CFG = {
   emailjsTemplate: "template_53rynh4",
   destinataires: [
     "noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
-  adminPw: "actif2024",    // ← modifier ici
+  adminPw: "actif2024",
   appTitle: "Actif Service"
 };
 
 // ── PRODUITS ──────────────────────────────────────────────
+// ⚠️ URLs corrigées le 30/03/2026 — noms de fichiers exacts du serveur GitHub
 const ALL_PRODUCTS = [
-  {id:"p01",nom:"Ajax citron",img:"https://actif-service.github.io/commande-materiel/images/Ajax_citron.jpg"},
-  {id:"p02",nom:"Glass 2000 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Glass_2000_1_litre.jpg"},
-  {id:"p03",nom:"Sani-day 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Sani-day_1_litre.jpg"},
-  {id:"p04",nom:"Detarsan 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
-  {id:"p05",nom:"Dreft 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Dreft_1_litre.jpg"},
-  {id:"p06",nom:"WC Gel avec Javel",img:"https://actif-service.github.io/commande-materiel/images/WC%20Gel%20avec%20Javel.jpg"},
-  {id:"p07",nom:"Gants de ménage Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_S.jpg"},
-  {id:"p08",nom:"Gants de ménage Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_M.jpg"},
-  {id:"p09",nom:"Gants de ménage Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_L.jpg"},
-  {id:"p10",nom:"Gants jetable Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_S.jpg"},
-  {id:"p11",nom:"Gants jetable Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_M.jpg"},
-  {id:"p12",nom:"Gants jetable Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_L.jpg"},
-  {id:"p13",nom:"Lavette micro fibre",img:"https://actif-service.github.io/commande-materiel/images/Lavette_micro_fibre.jpg"},
-  {id:"p14",nom:"Torchon Micro fibre 50×70cm",img:"https://actif-service.github.io/commande-materiel/images/Torchon_Micro_fibre_50_x_70cm.jpg"},
-  {id:"p15",nom:"Ballot 48 rouleaux papier WC",img:"https://actif-service.github.io/commande-materiel/images/Ballot-48_rouleaux_papier_WC.jpg"},
-  {id:"p16",nom:"Papier Zig Zag",img:"https://actif-service.github.io/commande-materiel/images/Papier_Zig_Zag.jpg"},
-  {id:"p17",nom:"Maxi Jumbo Papernet",img:"https://actif-service.github.io/commande-materiel/images/Maxi_Jumbo_Papernet.jpg"},
-  {id:"p18",nom:"Papier Toilette Mini Jumbo",img:"https://actif-service.github.io/commande-materiel/images/Mini_Jumbo_Papernet.jpg"},
-  {id:"p19",nom:"Brosse coco 30 cm",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20coco%2030%20cm.jpg"},
-  {id:"p20",nom:"Brosse de rue + manche",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20de%20rue%20+%20manche.jpg"},
-  {id:"p21",nom:"Raclette Sol 45 cm",img:"https://actif-service.github.io/commande-materiel/images/Raclette%20Sol%2045%20cm.jpg"},
-  {id:"p22",nom:"Ramassette + brosse",img:"https://actif-service.github.io/commande-materiel/images/Ramassette%20+%20brosse.jpg"},
-  {id:"p23",nom:"Sacs poubelle bleus 70×110cm",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20bleus%2070%20x%20110cm.jpg"},
-  {id:"p24",nom:"Sacs poubelle jaunes 70×110cm",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20jaunes%2070%20x%20110cm.jpg"},
-  {id:"p25",nom:"Sacs poubelle noirs 70×110cm 50µ",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20noirs%2070%20x%20110cm%2050%C2%B5.jpg"},
-  {id:"p26",nom:"Tête de Loup",img:"https://actif-service.github.io/commande-materiel/images/Tete_de_Loup.jpg"},
-  {id:"p27",nom:"Cube urinoir Nicols",img:"https://actif-service.github.io/commande-materiel/images/Cube_urinoir_Nicols.jpg"},
-  {id:"p28",nom:"Eau de javel 5 litres",img:"https://actif-service.github.io/commande-materiel/images/Eau_de_javel_5_litres.jpg"},
-  {id:"p29",nom:"Vinaigre 1,5 litres",img:"https://actif-service.github.io/commande-materiel/images/Vinaigre%201%2C5litres.jpg"},
-  {id:"p30",nom:"Sac aspirateur Aero 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Aero%208.jpg"},
-  {id:"p31",nom:"Sac aspirateur Vento 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Vento%208.jpg"}
+  {id:"p01",nom:"Ajax citron",                    img:"https://actif-service.github.io/commande-materiel/images/Ajax_citron.jpg"},
+  {id:"p02",nom:"Glass 2000 1 litre",             img:"https://actif-service.github.io/commande-materiel/images/Glass_2000_1_litre.jpg"},
+  {id:"p03",nom:"Sani-day 1 litre",               img:"https://actif-service.github.io/commande-materiel/images/Sani-day_1_litre.jpg"},
+  {id:"p04",nom:"Detarsan 1 litre",               img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
+  {id:"p05",nom:"Dreft 1 litre",                  img:"https://actif-service.github.io/commande-materiel/images/Dreft_1_litre.jpg"},
+  {id:"p06",nom:"WC Gel avec Javel",              img:"https://actif-service.github.io/commande-materiel/images/WC%20Gel%20avec%20Javel.jpg"},
+  {id:"p07",nom:"Gants de ménage Taille S",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__S.jpg"},
+  {id:"p08",nom:"Gants de ménage Taille M",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__M.jpg"},
+  {id:"p09",nom:"Gants de ménage Taille L",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__L.jpg"},
+  {id:"p10",nom:"Gants jetable Taille S",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_S.jpg"},
+  {id:"p11",nom:"Gants jetable Taille M",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_M.jpg"},
+  {id:"p12",nom:"Gants jetable Taille L",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_L.jpg"},
+  {id:"p13",nom:"Lavette micro fibre",            img:"https://actif-service.github.io/commande-materiel/images/Lavette%20micro%20fibre.jpg"},
+  {id:"p14",nom:"Torchon Micro fibre 50x70cm",    img:"https://actif-service.github.io/commande-materiel/images/Torchon%20Micro%20fibre%2050%20x%2070cm.jpg"},
+  {id:"p15",nom:"Ballot 48 rouleaux papier WC",   img:"https://actif-service.github.io/commande-materiel/images/Ballot%20-%2048%20rouleaux%20papier%20WC.jpg"},
+  {id:"p16",nom:"Papier Zig Zag",                 img:"https://actif-service.github.io/commande-materiel/images/Papier%20Zig%20Zag.jpg"},
+  {id:"p17",nom:"Maxi Jumbo Papernet",            img:"https://actif-service.github.io/commande-materiel/images/Maxi%20Jumbo%20Papernet.jpg"},
+  {id:"p18",nom:"Papier Toilette Mini Jumbo",     img:"https://actif-service.github.io/commande-materiel/images/Papier%20Toilette%20Mini%20Jumbo.jpg"},
+  {id:"p19",nom:"Brosse coco 30 cm",              img:"https://actif-service.github.io/commande-materiel/images/Brosse%20coco%2030%20cm.jpg"},
+  {id:"p20",nom:"Brosse de rue + manche",         img:"https://actif-service.github.io/commande-materiel/images/Brosse%20de%20rue%20+%20manche.jpg"},
+  {id:"p21",nom:"Raclette Sol 45 cm",             img:"https://actif-service.github.io/commande-materiel/images/Raclette%20Sol%2045%20cm.jpg"},
+  {id:"p22",nom:"Ramassette + brosse",            img:"https://actif-service.github.io/commande-materiel/images/Ramassette%20+%20brosse.jpg"},
+  {id:"p23",nom:"Sacs poubelle bleus 70x110cm",   img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20bleus%2070%20x%20110cm.jpg"},
+  {id:"p24",nom:"Sacs poubelle jaunes 70x110cm",  img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20jaunes%2070%20x%20110cm.jpg"},
+  {id:"p25",nom:"Sacs poubelle noirs 70x110cm 50µ",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20noirs%2070%20x%20110cm%2050%C2%B5.jpg"},
+  {id:"p26",nom:"Tête de Loup",                   img:"https://actif-service.github.io/commande-materiel/images/Tete_de_Loup.jpg"},
+  {id:"p27",nom:"Cube urinoir Nicols",            img:"https://actif-service.github.io/commande-materiel/images/Cube_urinoir_Nicols.jpg"},
+  {id:"p28",nom:"Eau de javel 5 litres",          img:"https://actif-service.github.io/commande-materiel/images/Eau_de_javel_5_litres.jpg"},
+  {id:"p29",nom:"Vinaigre 1,5 litres",            img:"https://actif-service.github.io/commande-materiel/images/Vinaigre%201%2C5litres.jpg"},
+  {id:"p30",nom:"Sac aspirateur Aero 8",          img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Aero%208.jpg"},
+  {id:"p31",nom:"Sac aspirateur Vento 8",         img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Vento%208.jpg"}
 ];
 
 // ── CLIENTS (modifiable via Admin) ────────────────────────
@@ -381,7 +382,6 @@ const DEFAULT_CLIENTS = [
   {key:"Rose_Group",societe:"Rose Group Invest",chantiers:[{nom:"Chantier 1",adresse:""}]},
   {key:"Viana_Cleaning",societe:"Viane Clean Services",chantiers:[{nom:"Chantier 1",adresse:""}]},
   {key:"Angonet",societe:"Angonet",chantiers:[{nom:"Chantier 1",adresse:""}]},
-  {key:"GK_Solutions",societe:"GK Solutions",chantiers:[{nom:"Chantier 1",adresse:""}]},
   {key:"LS_Services",societe:"L & S Services",chantiers:[{nom:"Chantier 1",adresse:""}]}
 ];
 
@@ -473,7 +473,6 @@ function renderOrder(){
   document.getElementById('main-nav').style.display = '';
 
   if(!client && !ck){
-    // Pas de client → page d'accueil avec liste des clients (pour l'admin)
     el.innerHTML = `
       <div class="order-hero">
         <img class="order-hero-logo" src=https://actif-service.github.io/Commande-Produits/images/logo.jpg alt="logo" onerror="this.style.display='none'">
@@ -672,7 +671,6 @@ function openConfirm(){
     ${autre?`<div style="margin-top:12px;padding:12px;background:#FEF3E2;border-radius:8px;font-size:13px;"><strong>Autre :</strong> ${esc(autre)}</div>`:''}
     <div style="margin-top:16px;font-size:12px;color:var(--slate);">📧 Envoi vers : ${CFG.destinataires.join(' et ')}</div>`;
 
-  // Store for sending
   ORDER._pendingChantier = chantier;
   ORDER._pendingNom = nom;
   ORDER._pendingAutre = autre;

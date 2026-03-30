@@ -19,8 +19,6 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',system-ui,sans-serif;background:#F1F5F9;color:var(--text);min-height:100vh;}
 img{display:block;}
-
-/* ── NAV ── */
 .nav{background:var(--white);border-bottom:1px solid var(--border);height:58px;display:flex;align-items:center;padding:0 24px;gap:8px;position:sticky;top:0;z-index:200;box-shadow:0 1px 0 var(--border);}
 .nav-brand{display:flex;align-items:center;gap:10px;margin-right:auto;}
 .nav-logo-img{height:32px;border-radius:6px;object-fit:contain;}
@@ -31,32 +29,18 @@ img{display:block;}
 .ntab:hover:not(.on){color:var(--text);}
 .nav-badge{background:var(--red);color:#fff;border-radius:20px;font-size:10px;font-weight:700;padding:1px 6px;min-width:18px;text-align:center;display:none;}
 .nav-badge.show{display:inline-block;}
-
-/* ── LAYOUT ── */
 .page{display:none;padding:28px 24px;max-width:980px;margin:0 auto;}
 .page.on{display:block;}
-
-/* ── TYPOGRAPHY ── */
 .pg-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px;}
 .pg-sub{font-size:14px;color:var(--text-2);margin-bottom:24px;}
-
-/* ── CARD ── */
 .card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);}
 .card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--slate);margin-bottom:12px;}
-
-/* ── FORM ── */
 .frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:14px;}
 .fgroup{display:flex;flex-direction:column;gap:5px;}
 .flabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);}
-input[type=text],input[type=email],input[type=password],select,textarea{
-  width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--white);
-  outline:none;transition:.15s;}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--white);outline:none;transition:.15s;}
 input:focus,select:focus,textarea:focus{border-color:var(--blue-2);box-shadow:0 0 0 3px rgba(34,114,195,.1);}
-input[readonly]{background:#F8FAFC;color:var(--slate);}
 textarea{resize:vertical;min-height:80px;}
-
-/* ── BUTTONS ── */
 .btn{padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
 .btn-primary{background:var(--blue);color:#fff;}
@@ -68,50 +52,96 @@ textarea{resize:vertical;min-height:80px;}
 .btn-danger{background:var(--red-light);color:var(--red);border:1px solid rgba(185,28,28,.15);}
 .btn-danger:hover{background:#FCA5A5;color:var(--red);}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;}
-.btn-xs{padding:4px 9px;font-size:11px;border-radius:5px;}
-
-/* ── PRODUITS GRID ── */
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:16px 0;}
-.prod-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:.15s;position:relative;}
+ 
+/* ══════════════════════════════════════
+   GRILLE PRODUITS — STABLE (fix principal)
+   ══════════════════════════════════════ */
+.prod-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:10px;
+  margin:16px 0;
+  align-items:start; /* évite l'étirement vertical */
+}
+.prod-card{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  transition:border-color .15s,box-shadow .15s;
+  display:flex;
+  flex-direction:column;
+}
 .prod-card:hover{border-color:var(--blue-2);box-shadow:0 4px 12px rgba(27,95,168,.12);}
 .prod-card.has-qty{border-color:var(--blue);background:var(--blue-light);}
-.prod-img{width:100%;height:90px;object-fit:contain;background:#F8FAFC;padding:6px;}
-.prod-name{font-size:11px;font-weight:500;padding:7px 8px 4px;line-height:1.35;min-height:36px;color:var(--text);}
-.qty-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px 9px;}
+ 
+/* Conteneur image à hauteur FIXE — empêche le saut de layout */
+.prod-img-wrap{
+  width:100%;
+  height:90px;
+  flex-shrink:0;
+  background:#EEF2F7;
+  position:relative;
+  overflow:hidden;
+}
+/* Icône placeholder visible avant chargement */
+.prod-img-wrap::after{
+  content:'📦';
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  opacity:.2;
+  pointer-events:none;
+}
+.prod-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  position:absolute;
+  top:0;left:0;
+  opacity:0;
+  transition:opacity .25s;
+}
+.prod-img.loaded{opacity:1;}
+ 
+/* Nom à hauteur fixe — cartes toutes identiques */
+.prod-name{
+  font-size:11px;
+  font-weight:500;
+  padding:7px 8px 4px;
+  line-height:1.35;
+  height:40px;
+  overflow:hidden;
+  color:var(--text);
+  flex-shrink:0;
+}
+.qty-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px 9px;flex-shrink:0;}
 .qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text);transition:.1s;line-height:1;}
 .qty-btn:hover{background:var(--blue-light);border-color:var(--blue-2);color:var(--blue);}
 .prod-card.has-qty .qty-btn{border-color:var(--blue-2);}
 .qty-inp{width:36px;text-align:center;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-weight:700;padding:3px 0;color:var(--text);background:transparent;outline:none;}
 .qty-inp:focus{border-color:var(--blue-2);}
-
-/* ── BADGES ── */
+ 
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;gap:4px;}
 .badge-blue{background:var(--blue-light);color:var(--blue);}
 .badge-green{background:var(--green-light);color:var(--green);}
-.badge-amber{background:var(--amber-light);color:var(--amber);}
-.badge-red{background:var(--red-light);color:var(--red);}
 .badge-slate{background:#F1F5F9;color:var(--slate);}
-
-/* ── PILLS (statuts) ── */
 .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
 .pill-wait{background:var(--amber-light);color:var(--amber);}
 .pill-part{background:var(--blue-light);color:var(--blue);}
 .pill-done{background:var(--green-light);color:var(--green);}
-
-/* ── STATS BAR ── */
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
 .stat-box{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px;text-align:center;box-shadow:var(--shadow);}
 .stat-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1;}
 .stat-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-top:4px;}
-
-/* ── FILTER ROW ── */
 .filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
 .fbtn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--slate);transition:.15s;}
 .fbtn.on{background:var(--blue);color:#fff;border-color:var(--blue);}
 .fbtn:hover:not(.on){border-color:var(--blue-2);color:var(--blue);}
-
-/* ── COMMANDE ROWS (suivi) ── */
-.cmd-row{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:.15s;box-shadow:var(--shadow);}
+.cmd-row{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow);}
 .cmd-row.done{border-color:#86EFAC;background:#F0FDF4;}
 .cmd-row.part{border-color:#93C5FD;background:#EFF6FF;}
 .cmd-head{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;}
@@ -129,8 +159,6 @@ textarea{resize:vertical;min-height:80px;}
 .chk-lbl.done{color:var(--green);}
 .chk-lbl.done .lbl-txt{text-decoration:line-through;opacity:.6;}
 .qty-pill{display:inline-block;background:var(--blue-light);color:var(--blue);font-weight:700;font-size:13px;padding:2px 10px;border-radius:20px;min-width:32px;text-align:center;}
-
-/* ── CLIENTS / ADMIN ── */
 .client-list{display:flex;flex-direction:column;gap:8px;}
 .client-item{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);}
 .client-item:hover{border-color:var(--blue-2);background:var(--blue-light);}
@@ -148,24 +176,15 @@ textarea{resize:vertical;min-height:80px;}
 .pci input[type=checkbox]{accent-color:var(--green);width:16px;height:16px;cursor:pointer;flex-shrink:0;}
 .pci-lbl{font-size:12px;font-weight:500;line-height:1.3;cursor:pointer;}
 .pci.on .pci-lbl{color:var(--green);}
-
-/* ── BREADCRUMB ── */
 .bc{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--slate);margin-bottom:20px;flex-wrap:wrap;}
 .bc a{color:var(--blue);cursor:pointer;font-weight:500;}
 .bc a:hover{text-decoration:underline;}
 .bc-sep{color:var(--border);}
-
-/* ── LINK BOX ── */
 .link-box{background:var(--blue-light);border:1px solid rgba(27,95,168,.2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
 .link-url{font-size:12px;font-weight:500;color:var(--blue);flex:1;word-break:break-all;}
-
-/* ── ALERT ── */
 .alert{padding:13px 16px;border-radius:9px;font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;}
 .alert-info{background:var(--blue-light);color:var(--blue);border:1px solid rgba(27,95,168,.2);}
-.alert-success{background:var(--green-light);color:var(--green);border:1px solid rgba(30,124,74,.2);}
 .alert-warn{background:var(--amber-light);color:var(--amber);border:1px solid rgba(184,106,10,.2);}
-
-/* ── CART SUMMARY ── */
 .cart-bar{position:sticky;bottom:16px;left:0;right:0;z-index:100;display:none;}
 .cart-bar.show{display:block;}
 .cart-inner{max-width:980px;margin:0 auto;padding:0 24px;}
@@ -173,39 +192,32 @@ textarea{resize:vertical;min-height:80px;}
 .cart-pill:hover{background:var(--blue);}
 .cart-count{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
 .cart-desc{font-size:13px;opacity:.85;flex:1;}
-.cart-send{background:#fff;color:var(--blue-dark);padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer;transition:.15s;}
-.cart-send:hover{background:#E0EBF8;}
-
-/* ── TOAST ── */
+.cart-send{background:#fff;color:var(--blue-dark);padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer;}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;padding:13px 20px;border-radius:10px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;max-width:360px;box-shadow:0 8px 24px rgba(0,0,0,.25);}
 .toast.show{opacity:1;transform:none;}
 .toast.err{background:var(--red);}
-
-/* ── MODAL ── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;padding:16px;}
 .modal-bg.open{display:flex;}
 .modal{background:var(--white);border-radius:16px;padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.3);}
 .modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px;}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;flex-wrap:wrap;}
-
-/* ── TOOLBAR ── */
 .toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
 .spacer{flex:1;}
-
-/* ── LOGIN ── */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0D3D70 0%,#1B5FA8 60%,#2272C3 100%);padding:24px;}
-.login-card{background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 60px rgba(0,0,0,.3);}
-.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
-.login-logo img{height:40px;border-radius:8px;}
-.login-logo span{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--blue-dark);}
-
-/* ── COMMANDE CLIENT : HERO ── */
 .order-hero{background:linear-gradient(135deg,var(--blue-dark),var(--blue-2));border-radius:14px;padding:24px;margin-bottom:24px;color:#fff;display:flex;align-items:center;gap:16px;}
 .order-hero-logo{height:52px;border-radius:10px;object-fit:contain;background:rgba(255,255,255,.15);padding:4px;}
 .order-hero-text h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
 .order-hero-text p{font-size:13px;opacity:.8;margin-top:3px;}
-
-/* ── RESPONSIVE ── */
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-wrap input{padding-left:36px;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--slate);font-size:15px;pointer-events:none;}
+.admin-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);}
+.atab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;}
+.atab.on{color:var(--blue);border-bottom-color:var(--blue);}
+.empty{text-align:center;padding:48px 16px;color:var(--slate);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text);}
+.empty-sub{font-size:13px;}
+.inline-form{background:#F8FAFC;border:1.5px dashed var(--border);border-radius:10px;padding:16px;margin-top:12px;}
 @media(max-width:640px){
   .nav{padding:0 14px;}
   .page{padding:20px 14px;}
@@ -216,33 +228,12 @@ textarea{resize:vertical;min-height:80px;}
   .order-hero{flex-direction:column;text-align:center;}
   .ntab{padding:5px 10px;font-size:12px;}
 }
-
-/* ── SECTION SEARCH ── */
-.search-wrap{position:relative;margin-bottom:14px;}
-.search-wrap input{padding-left:36px;}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--slate);font-size:15px;pointer-events:none;}
-
-/* ── ADMIN TABS ── */
-.admin-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);}
-.atab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;}
-.atab.on{color:var(--blue);border-bottom-color:var(--blue);}
-
-/* ── EMPTY STATE ── */
-.empty{text-align:center;padding:48px 16px;color:var(--slate);}
-.empty-icon{font-size:48px;margin-bottom:12px;}
-.empty-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text);}
-.empty-sub{font-size:13px;}
-
-/* ── NEW CHANTIER/CLIENT FORM ── */
-.inline-form{background:#F8FAFC;border:1.5px dashed var(--border);border-radius:10px;padding:16px;margin-top:12px;}
 </style>
 </head>
 <body>
-
-<!-- TOAST -->
+ 
 <div class="toast" id="toast"></div>
-
-<!-- MODAL CONFIRMATION COMMANDE -->
+ 
 <div class="modal-bg" id="modal-confirm">
   <div class="modal">
     <div class="modal-title">📦 Confirmer la commande</div>
@@ -253,8 +244,7 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
-
-<!-- MODAL MOT DE PASSE ADMIN -->
+ 
 <div class="modal-bg" id="modal-login">
   <div class="modal" style="max-width:380px;">
     <div class="modal-title">🔐 Espace Administration</div>
@@ -268,8 +258,7 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
-
-<!-- NAV -->
+ 
 <nav class="nav" id="main-nav" style="display:none;">
   <div class="nav-brand">
     <img class="nav-logo-img" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="Actif Service" onerror="this.style.display='none'">
@@ -283,13 +272,11 @@ textarea{resize:vertical;min-height:80px;}
     <button class="ntab" id="tab-admin" onclick="goTabAdmin()">Admin</button>
   </div>
 </nav>
-
-<!-- PAGES -->
+ 
 <div class="page on" id="pg-order"></div>
 <div class="page" id="pg-suivi"></div>
 <div class="page" id="pg-admin"></div>
-
-<!-- PANIER STICKY -->
+ 
 <div class="cart-bar" id="cart-bar">
   <div class="cart-inner">
     <div class="cart-pill" onclick="openConfirm()">
@@ -299,59 +286,52 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
-
+ 
 <script>
-// ╔══════════════════════════════════════════════════════════╗
-// ║  CONFIGURATION                                           ║
-// ╚══════════════════════════════════════════════════════════╝
 (function(){ emailjs.init("UIMYUuF1YijZh1DFI"); })();
-
+ 
 const CFG = {
   emailjsService: "service_kt6gmbs",
   emailjsTemplate: "template_53rynh4",
-  destinataires: [
-    "noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
+  destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
   adminPw: "actif2024",
   appTitle: "Actif Service"
 };
-
-// ── PRODUITS ──────────────────────────────────────────────
-// ⚠️ URLs corrigées le 30/03/2026 — noms de fichiers exacts du serveur GitHub
+ 
 const ALL_PRODUCTS = [
-  {id:"p01",nom:"Ajax citron",                    img:"https://actif-service.github.io/commande-materiel/images/Ajax_citron.jpg"},
-  {id:"p02",nom:"Glass 2000 1 litre",             img:"https://actif-service.github.io/commande-materiel/images/Glass_2000_1_litre.jpg"},
-  {id:"p03",nom:"Sani-day 1 litre",               img:"https://actif-service.github.io/commande-materiel/images/Sani-day_1_litre.jpg"},
-  {id:"p04",nom:"Detarsan 1 litre",               img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
-  {id:"p05",nom:"Dreft 1 litre",                  img:"https://actif-service.github.io/commande-materiel/images/Dreft_1_litre.jpg"},
-  {id:"p06",nom:"WC Gel avec Javel",              img:"https://actif-service.github.io/commande-materiel/images/WC_Gel_avec_Javel.jpg"},
-  {id:"p07",nom:"Gants de ménage Taille S",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_S.jpg"},
-  {id:"p08",nom:"Gants de ménage Taille M",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_M.jpg"},
-  {id:"p09",nom:"Gants de ménage Taille L",       img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_L.jpg"},
-  {id:"p10",nom:"Gants jetable Taille S",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_S.jpg"},
-  {id:"p11",nom:"Gants jetable Taille M",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_M.jpg"},
-  {id:"p12",nom:"Gants jetable Taille L",         img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_L.jpg"},
-  {id:"p13",nom:"Lavette micro fibre",            img:"https://actif-service.github.io/commande-materiel/images/Lavette_micro_fibre.jpg"},
-  {id:"p14",nom:"Torchon Micro fibre 50x70cm",    img:"https://actif-service.github.io/commande-materiel/images/Torchon_Micro_fibre_50_x_70cm.jpg"},
-  {id:"p15",nom:"Ballot 48 rouleaux papier WC",   img:"https://actif-service.github.io/commande-materiel/images/Ballot_48_rouleaux_papier_WC.jpg"},
-  {id:"p16",nom:"Papier Zig Zag",                 img:"https://actif-service.github.io/commande-materiel/images/Papier_Zig_Zag.jpg"},
-  {id:"p17",nom:"Maxi Jumbo Papernet",            img:"https://actif-service.github.io/commande-materiel/images/Maxi_Jumbo_Papernet.jpg"},
-  {id:"p18",nom:"Papier Toilette Mini Jumbo",     img:"https://actif-service.github.io/commande-materiel/images/Mini_Jumbo_Papernet.jpg"},
-  {id:"p19",nom:"Brosse coco 30 cm",              img:"https://actif-service.github.io/commande-materiel/images/Brosse_coco_30_cm.jpg"},
-  {id:"p20",nom:"Brosse de rue + manche",         img:"https://actif-service.github.io/commande-materiel/images/Brosse_de_rue_+_manche.jpg"},
-  {id:"p21",nom:"Raclette Sol 45 cm",             img:"https://actif-service.github.io/commande-materiel/images/Raclette_Sol_45_cm.jpg"},
-  {id:"p22",nom:"Ramassette + brosse",            img:"https://actif-service.github.io/commande-materiel/images/Ramassette_+_brosse.jpg"},
-  {id:"p23",nom:"Sacs poubelle bleus 70x110cm",   img:"https://actif-service.github.io/commande-materiel/images/Sacs_poubelle_bleus_70_x_110cm.jpg"},
-  {id:"p24",nom:"Sacs poubelle jaunes 70x110cm",  img:"https://actif-service.github.io/commande-materiel/images/Sacs_poubelle_jaunes_70_x_110cm.jpg"},
-  {id:"p25",nom:"Sacs poubelle noirs 70x110cm 50µ",img:"https://actif-service.github.io/commande-materiel/images/Sacs_poubelle_noirs_70_x_110cm_50%C2%B5.jpg"},
-  {id:"p26",nom:"Tête de Loup",                   img:"https://actif-service.github.io/commande-materiel/images/Tete_de_Loup.jpg"},
-  {id:"p27",nom:"Cube urinoir Nicols",            img:"https://actif-service.github.io/commande-materiel/images/Cube_urinoir_Nicols.jpg"},
-  {id:"p28",nom:"Eau de javel 5 litres",          img:"https://actif-service.github.io/commande-materiel/images/Eau_de_javel_5_litres.jpg"},
-  {id:"p29",nom:"Vinaigre 1,5 litres",            img:"https://actif-service.github.io/commande-materiel/images/Vinaigre_1%2C5litres.jpg"},
-  {id:"p30",nom:"Sac aspirateur Aero 8",          img:"https://actif-service.github.io/commande-materiel/images/sac_aspirateur_Aero_8.jpg"},
-  {id:"p31",nom:"Sac aspirateur Vento 8",         img:"https://actif-service.github.io/commande-materiel/images/sac_aspirateur_Vento_8.jpg"}
+  {id:"p01",nom:"Ajax citron",img:"https://actif-service.github.io/commande-materiel/images/Ajax%20citron.jpg"},
+  {id:"p02",nom:"Glass 2000 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Glass%202000%201%20litre.jpg"},
+  {id:"p03",nom:"Sani-day 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Sani-day%201%20litre.jpg"},
+  {id:"p04",nom:"Detarsan 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
+  {id:"p05",nom:"Dreft 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Dreft%201%20litre.jpg"},
+  {id:"p06",nom:"WC Gel avec Javel",img:"https://actif-service.github.io/commande-materiel/images/WC%20Gel%20avec%20Javel.jpg"},
+  {id:"p07",nom:"Gants de ménage Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__S.jpg"},
+  {id:"p08",nom:"Gants de ménage Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__M.jpg"},
+  {id:"p09",nom:"Gants de ménage Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__L.jpg"},
+  {id:"p10",nom:"Gants jetable Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_S.jpg"},
+  {id:"p11",nom:"Gants jetable Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_M.jpg"},
+  {id:"p12",nom:"Gants jetable Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_L.jpg"},
+  {id:"p13",nom:"Lavette micro fibre",img:"https://actif-service.github.io/commande-materiel/images/Lavette%20micro%20fibre.jpg"},
+  {id:"p14",nom:"Torchon Micro fibre 50×70cm",img:"https://actif-service.github.io/commande-materiel/images/Torchon%20Micro%20fibre%2050%20x%2070cm.jpg"},
+  {id:"p15",nom:"Ballot 48 rouleaux papier WC",img:"https://actif-service.github.io/commande-materiel/images/Ballot%20-%2048%20rouleaux%20papier%20WC.jpg"},
+  {id:"p16",nom:"Papier Zig Zag",img:"https://actif-service.github.io/commande-materiel/images/Papier%20Zig%20Zag.jpg"},
+  {id:"p17",nom:"Maxi Jumbo Papernet",img:"https://actif-service.github.io/commande-materiel/images/Maxi%20Jumbo%20Papernet.jpg"},
+  {id:"p18",nom:"Papier Toilette Mini Jumbo",img:"https://actif-service.github.io/commande-materiel/images/Papier%20Toilette%20Mini%20Jumbo.jpg"},
+  {id:"p19",nom:"Brosse coco 30 cm",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20coco%2030%20cm.jpg"},
+  {id:"p20",nom:"Brosse de rue + manche",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20de%20rue%20+%20manche.jpg"},
+  {id:"p21",nom:"Raclette Sol 45 cm",img:"https://actif-service.github.io/commande-materiel/images/Raclette%20Sol%2045%20cm.jpg"},
+  {id:"p22",nom:"Ramassette + brosse",img:"https://actif-service.github.io/commande-materiel/images/Ramassette%20+%20brosse.jpg"},
+  {id:"p23",nom:"Sacs poubelle bleus 70×110cm",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20bleus%2070%20x%20110cm.jpg"},
+  {id:"p24",nom:"Sacs poubelle jaunes 70×110cm",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20jaunes%2070%20x%20110cm.jpg"},
+  {id:"p25",nom:"Sacs poubelle noirs 70×110cm 50µ",img:"https://actif-service.github.io/commande-materiel/images/Sacs%20poubelle%20noirs%2070%20x%20110cm%2050%C2%B5.jpg"},
+  {id:"p26",nom:"Tête de Loup",img:"https://actif-service.github.io/commande-materiel/images/Tete_de_Loup.jpg"},
+  {id:"p27",nom:"Cube urinoir Nicols",img:"https://actif-service.github.io/commande-materiel/images/Cube_urinoir_Nicols.jpg"},
+  {id:"p28",nom:"Eau de javel 5 litres",img:"https://actif-service.github.io/commande-materiel/images/Eau_de_javel_5_litres.jpg"},
+  {id:"p29",nom:"Vinaigre 1,5 litres",img:"https://actif-service.github.io/commande-materiel/images/Vinaigre%201%2C5litres.jpg"},
+  {id:"p30",nom:"Sac aspirateur Aero 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Aero%208.jpg"},
+  {id:"p31",nom:"Sac aspirateur Vento 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Vento%208.jpg"}
 ];
-
-// ── CLIENTS (modifiable via Admin) ────────────────────────
+ 
 const DEFAULT_CLIENTS = [
   {key:"Be_Clean",societe:"BE Clean",chantiers:[
     {nom:"AKROPOLIS",adresse:"Luitberg, 25 — 1853 Strombeek-Bever"},
@@ -384,134 +364,101 @@ const DEFAULT_CLIENTS = [
   {key:"Angonet",societe:"Angonet",chantiers:[{nom:"Chantier 1",adresse:""}]},
   {key:"LS_Services",societe:"L & S Services",chantiers:[{nom:"Chantier 1",adresse:""}]}
 ];
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  STORAGE                                                 ║
-// ╚══════════════════════════════════════════════════════════╝
-const LS = {
+ 
+const LS={
   get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},
   set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},
   del:(k)=>{localStorage.removeItem(k);}
 };
-
-function getClients(){ return LS.get('as_clients', DEFAULT_CLIENTS); }
-function saveClients(c){ LS.set('as_clients', c); }
-function getCommandes(){ return LS.get('as_commandes', []); }
-function saveCommandes(c){ LS.set('as_commandes', c); }
-function getChantierProds(ck, cn){ return LS.get('acp_'+ck+'_'+encodeURIComponent(cn), null); }
-function setChantierProds(ck, cn, v){ LS.set('acp_'+ck+'_'+encodeURIComponent(cn), v); }
-function delChantierProds(ck, cn){ LS.del('acp_'+ck+'_'+encodeURIComponent(cn)); }
-function isAdminUnlocked(){ return sessionStorage.getItem('as_admin')==='1'; }
-function unlockAdmin(){ sessionStorage.setItem('as_admin','1'); }
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  UTILS                                                   ║
-// ╚══════════════════════════════════════════════════════════╝
-const esc = s => s ? String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]) : '';
-const fmtDate = iso => { const d=new Date(iso); return d.toLocaleDateString('fr-BE')+' '+d.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'}); };
-const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-
-function showToast(msg, err=false){
+function getClients(){return LS.get('as_clients',DEFAULT_CLIENTS);}
+function saveClients(c){LS.set('as_clients',c);}
+function getCommandes(){return LS.get('as_commandes',[]);}
+function saveCommandes(c){LS.set('as_commandes',c);}
+function getChantierProds(ck,cn){return LS.get('acp_'+ck+'_'+encodeURIComponent(cn),null);}
+function setChantierProds(ck,cn,v){LS.set('acp_'+ck+'_'+encodeURIComponent(cn),v);}
+function delChantierProds(ck,cn){LS.del('acp_'+ck+'_'+encodeURIComponent(cn));}
+function isAdminUnlocked(){return sessionStorage.getItem('as_admin')==='1';}
+function unlockAdmin(){sessionStorage.setItem('as_admin','1');}
+ 
+const esc=s=>s?String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]):'';
+const fmtDate=iso=>{const d=new Date(iso);return d.toLocaleDateString('fr-BE')+' '+d.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ 
+function showToast(msg,err=false){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast show'+(err?' err':'');
-  clearTimeout(t._t); t._t=setTimeout(()=>t.className='toast',3800);
+  t.textContent=msg;t.className='toast show'+(err?' err':'');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3800);
 }
-
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(){
-  document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));
-}
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  NAVIGATION                                              ║
-// ╚══════════════════════════════════════════════════════════╝
-const TABS = ['order','suivi','admin'];
-let currentTab = 'order';
-
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(){document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+ 
+const TABS=['order','suivi','admin'];
+let currentTab='order';
 function goTab(t){
-  currentTab = t;
+  currentTab=t;
   TABS.forEach(id=>{
-    document.getElementById('pg-'+id).classList.toggle('on', id===t);
-    document.getElementById('tab-'+id).classList.toggle('on', id===t);
+    document.getElementById('pg-'+id).classList.toggle('on',id===t);
+    document.getElementById('tab-'+id).classList.toggle('on',id===t);
   });
   document.getElementById('cart-bar').classList.remove('show');
-  if(t==='order') renderOrder();
-  if(t==='suivi') renderSuivi();
-  if(t==='admin') renderAdmin();
+  if(t==='order')renderOrder();
+  if(t==='suivi')renderSuivi();
+  if(t==='admin')renderAdmin();
 }
-
 function goTabAdmin(){
-  if(isAdminUnlocked()){ goTab('admin'); return; }
+  if(isAdminUnlocked()){goTab('admin');return;}
   document.getElementById('admin-pw').value='';
   openModal('modal-login');
 }
-
 function checkAdminPw(){
-  const pw = document.getElementById('admin-pw').value;
-  if(pw===CFG.adminPw){ unlockAdmin(); closeModal(); goTab('admin'); }
-  else{ showToast('Mot de passe incorrect',true); }
+  const pw=document.getElementById('admin-pw').value;
+  if(pw===CFG.adminPw){unlockAdmin();closeModal();goTab('admin');}
+  else{showToast('Mot de passe incorrect',true);}
 }
-
 function updateSuiviBadge(){
-  const n = getCommandes().filter(c=>c.statut!=='livree').length;
-  const b = document.getElementById('badge-suivi');
-  b.textContent = n; b.classList.toggle('show', n>0);
+  const n=getCommandes().filter(c=>c.statut!=='livree').length;
+  const b=document.getElementById('badge-suivi');
+  b.textContent=n;b.classList.toggle('show',n>0);
 }
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  PAGE COMMANDE                                           ║
-// ╚══════════════════════════════════════════════════════════╝
-let ORDER = { client:null, chantier:null, demandeur:'', produits:{} };
-
+ 
+let ORDER={client:null,chantier:null,demandeur:'',produits:{}};
+ 
 function renderOrder(){
-  const params = new URLSearchParams(location.search);
-  const ck = params.get('client');
-  const clients = getClients();
-  const client = ck ? clients.find(c=>c.key===ck) : null;
-  const el = document.getElementById('pg-order');
-  document.getElementById('main-nav').style.display = '';
-
-  if(!client && !ck){
-    el.innerHTML = `
+  const params=new URLSearchParams(location.search);
+  const ck=params.get('client');
+  const clients=getClients();
+  const client=ck?clients.find(c=>c.key===ck):null;
+  const el=document.getElementById('pg-order');
+  document.getElementById('main-nav').style.display='';
+ 
+  if(!client&&!ck){
+    el.innerHTML=`
       <div class="order-hero">
-        <img class="order-hero-logo" src=https://actif-service.github.io/Commande-Produits/images/logo.jpg alt="logo" onerror="this.style.display='none'">
-        <div class="order-hero-text">
-          <h2>Commande de Matériel</h2>
-          <p>Sélectionnez votre société pour passer une commande</p>
-        </div>
+        <img class="order-hero-logo" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="logo" onerror="this.style.display='none'">
+        <div class="order-hero-text"><h2>Commande de Matériel</h2><p>Sélectionnez votre société pour passer une commande</p></div>
       </div>
       <div class="client-list">
         ${clients.map(c=>`
           <div class="client-item" onclick="location.href='?client=${c.key}'">
-            <div style="flex:1;">
-              <div class="client-name">${esc(c.societe)}</div>
-              <div class="client-meta">${c.chantiers.length} chantier${c.chantiers.length>1?'s':''}</div>
-            </div>
+            <div style="flex:1;"><div class="client-name">${esc(c.societe)}</div><div class="client-meta">${c.chantiers.length} chantier${c.chantiers.length>1?'s':''}</div></div>
             <span style="color:var(--slate);font-size:20px;">›</span>
           </div>`).join('')}
       </div>`;
     return;
   }
-
   if(!client){
-    el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Contactez votre responsable Actif Service pour obtenir votre lien.</div></div>`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Contactez votre responsable Actif Service.</div></div>`;
     return;
   }
-
-  ORDER.client = client;
-  ORDER.produits = {};
-  ORDER.demandeur = '';
-
-  el.innerHTML = `
+ 
+  ORDER.client=client;ORDER.produits={};ORDER.demandeur='';
+ 
+  el.innerHTML=`
     <div class="order-hero">
-      <img class="order-hero-logo" src=https://actif-service.github.io/Commande-Produits/images/logo.jpg alt="logo" onerror="this.style.display='none'">
-      <div class="order-hero-text">
-        <h2>${esc(client.societe)}</h2>
-        <p>Formulaire de commande matériel</p>
-      </div>
+      <img class="order-hero-logo" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="logo" onerror="this.style.display='none'">
+      <div class="order-hero-text"><h2>${esc(client.societe)}</h2><p>Formulaire de commande matériel</p></div>
     </div>
-
     <div class="card">
       <div class="card-title">Informations</div>
       <div class="frow">
@@ -528,12 +475,7 @@ function renderOrder(){
         </div>
       </div>
     </div>
-
-    <div id="ord-hint" class="alert alert-info">
-      <span>ℹ️</span>
-      <span>Sélectionnez un chantier pour afficher les produits disponibles.</span>
-    </div>
-
+    <div id="ord-hint" class="alert alert-info"><span>ℹ️</span><span>Sélectionnez un chantier pour afficher les produits disponibles.</span></div>
     <div id="ord-prods" style="display:none;">
       <div class="toolbar">
         <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;">Produits disponibles</div>
@@ -547,43 +489,40 @@ function renderOrder(){
       </div>
       <div class="prod-grid" id="ord-grid"></div>
     </div>
-
     <div id="ord-autre-wrap" style="display:none;">
       <div class="card">
         <div class="card-title">Autre demande (optionnel)</div>
         <textarea id="ord-autre" placeholder="Décrivez votre besoin particulier..."></textarea>
       </div>
     </div>`;
-
   updateCartBar();
 }
-
+ 
 function onChantierChange(){
-  const v = document.getElementById('ord-chantier').value;
-  const hint = document.getElementById('ord-hint');
-  const prods = document.getElementById('ord-prods');
-  const autreWrap = document.getElementById('ord-autre-wrap');
-
-  if(!v){ hint.style.display=''; prods.style.display='none'; autreWrap.style.display='none'; return; }
-  hint.style.display='none'; prods.style.display=''; autreWrap.style.display='';
-
-  ORDER.chantier = v;
-  ORDER.produits = {};
-
-  const ck = ORDER.client.key;
-  const allowed = getChantierProds(ck, v);
-  const list = allowed ? ALL_PRODUCTS.filter(p=>allowed.includes(p.nom)) : ALL_PRODUCTS;
-
-  document.getElementById('ord-pcnt').textContent = list.length+' produit'+(list.length>1?'s':'');
+  const v=document.getElementById('ord-chantier').value;
+  const hint=document.getElementById('ord-hint');
+  const prods=document.getElementById('ord-prods');
+  const autreWrap=document.getElementById('ord-autre-wrap');
+  if(!v){hint.style.display='';prods.style.display='none';autreWrap.style.display='none';return;}
+  hint.style.display='none';prods.style.display='';autreWrap.style.display='';
+  ORDER.chantier=v;ORDER.produits={};
+  const allowed=getChantierProds(ORDER.client.key,v);
+  const list=allowed?ALL_PRODUCTS.filter(p=>allowed.includes(p.nom)):ALL_PRODUCTS;
+  document.getElementById('ord-pcnt').textContent=list.length+' produit'+(list.length>1?'s':'');
   renderProdGrid(list);
   updateCartBar();
 }
-
+ 
+// ✅ FIX : conteneur image à hauteur fixe, image en position absolute, fade-in au chargement
 function renderProdGrid(list){
-  document.getElementById('ord-grid').innerHTML = list.map(p=>{
-    const e = encodeURIComponent(p.nom);
+  document.getElementById('ord-grid').innerHTML=list.map(p=>{
+    const e=encodeURIComponent(p.nom);
     return `<div class="prod-card" id="pc_${e}">
-      <img class="prod-img" src="${esc(p.img)}" alt="${esc(p.nom)}" loading="lazy" onerror="this.style.background='#e2e8f0'">
+      <div class="prod-img-wrap">
+        <img class="prod-img" src="${esc(p.img)}" alt="${esc(p.nom)}"
+          onload="this.classList.add('loaded')"
+          onerror="this.style.display='none'">
+      </div>
       <div class="prod-name">${esc(p.nom)}</div>
       <div class="qty-row">
         <button class="qty-btn" onclick="dq('${e}',-1)">−</button>
@@ -593,68 +532,52 @@ function renderProdGrid(list){
     </div>`;
   }).join('');
 }
-
+ 
 function filterProds(q){
-  const grid = document.getElementById('ord-grid');
-  if(!grid) return;
-  const q2 = q.toLowerCase();
+  const grid=document.getElementById('ord-grid');if(!grid)return;
+  const q2=q.toLowerCase();
   grid.querySelectorAll('.prod-card').forEach(card=>{
-    const nom = card.querySelector('.prod-name').textContent.toLowerCase();
-    card.style.display = nom.includes(q2) ? '' : 'none';
+    card.style.display=card.querySelector('.prod-name').textContent.toLowerCase().includes(q2)?'':'none';
   });
 }
-
-function dq(e, d){
-  const i = document.getElementById('q_'+e);
-  if(!i) return;
-  i.value = Math.max(0,(parseInt(i.value)||0)+d);
-  onQtyChange(e);
+function dq(e,d){
+  const i=document.getElementById('q_'+e);if(!i)return;
+  i.value=Math.max(0,(parseInt(i.value)||0)+d);onQtyChange(e);
 }
-
 function onQtyChange(e){
-  const i = document.getElementById('q_'+e);
-  const card = document.getElementById('pc_'+e);
-  const q = parseInt(i.value)||0;
-  const nom = i.dataset.nom;
-  if(q>0){ ORDER.produits[nom]=q; card.classList.add('has-qty'); }
-  else { delete ORDER.produits[nom]; card.classList.remove('has-qty'); }
+  const i=document.getElementById('q_'+e);
+  const card=document.getElementById('pc_'+e);
+  const q=parseInt(i.value)||0;
+  const nom=i.dataset.nom;
+  if(q>0){ORDER.produits[nom]=q;card.classList.add('has-qty');}
+  else{delete ORDER.produits[nom];card.classList.remove('has-qty');}
   updateCartBar();
 }
-
 function resetQtys(){
-  document.querySelectorAll('.qty-inp').forEach(i=>{ i.value=0; });
+  document.querySelectorAll('.qty-inp').forEach(i=>{i.value=0;});
   document.querySelectorAll('.prod-card').forEach(c=>c.classList.remove('has-qty'));
-  ORDER.produits = {};
-  updateCartBar();
+  ORDER.produits={};updateCartBar();
 }
-
 function updateCartBar(){
-  const total = Object.values(ORDER.produits).reduce((s,v)=>s+v,0);
-  const items = Object.keys(ORDER.produits).length;
-  const bar = document.getElementById('cart-bar');
-  document.getElementById('cart-count').textContent = total;
-  document.getElementById('cart-desc').textContent = items===1?'produit sélectionné':items+' produits, '+total+' unités';
-  bar.classList.toggle('show', items>0 && !!ORDER.chantier);
+  const total=Object.values(ORDER.produits).reduce((s,v)=>s+v,0);
+  const items=Object.keys(ORDER.produits).length;
+  document.getElementById('cart-count').textContent=total;
+  document.getElementById('cart-desc').textContent=items===1?'produit sélectionné':items+' produits, '+total+' unités';
+  document.getElementById('cart-bar').classList.toggle('show',items>0&&!!ORDER.chantier);
 }
-
-// ── CONFIRMATION & ENVOI ──────────────────────────────────
+ 
 function openConfirm(){
-  const chantier = document.getElementById('ord-chantier').value;
-  const nom = document.getElementById('ord-nom').value.trim();
-  if(!chantier){ showToast('Sélectionnez un chantier',true); return; }
-  if(!nom){ showToast('Indiquez votre nom',true); return; }
-  if(Object.keys(ORDER.produits).length===0){ showToast('Sélectionnez au moins un produit',true); return; }
-
-  const lines = Object.entries(ORDER.produits).map(([n,q])=>`
-    <tr>
-      <td style="padding:8px 12px;border-top:1px solid #E2E8F0;">${esc(n)}</td>
-      <td style="padding:8px 12px;border-top:1px solid #E2E8F0;text-align:center;font-weight:700;">${q}</td>
-    </tr>`).join('');
-
-  const chD = ORDER.client.chantiers.find(c=>c.nom===chantier);
-  const autre = (document.getElementById('ord-autre')||{}).value||'';
-
-  document.getElementById('modal-body').innerHTML = `
+  const chantier=document.getElementById('ord-chantier').value;
+  const nom=document.getElementById('ord-nom').value.trim();
+  if(!chantier){showToast('Sélectionnez un chantier',true);return;}
+  if(!nom){showToast('Indiquez votre nom',true);return;}
+  if(Object.keys(ORDER.produits).length===0){showToast('Sélectionnez au moins un produit',true);return;}
+  const lines=Object.entries(ORDER.produits).map(([n,q])=>`
+    <tr><td style="padding:8px 12px;border-top:1px solid #E2E8F0;">${esc(n)}</td>
+    <td style="padding:8px 12px;border-top:1px solid #E2E8F0;text-align:center;font-weight:700;">${q}</td></tr>`).join('');
+  const chD=ORDER.client.chantiers.find(c=>c.nom===chantier);
+  const autre=(document.getElementById('ord-autre')||{}).value||'';
+  document.getElementById('modal-body').innerHTML=`
     <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:16px;">
       <div style="font-size:13px;color:var(--slate);margin-bottom:8px;font-weight:600;">RÉCAPITULATIF</div>
       <div style="font-size:14px;"><strong>${esc(ORDER.client.societe)}</strong> · ${esc(chantier)}</div>
@@ -670,59 +593,63 @@ function openConfirm(){
     </table>
     ${autre?`<div style="margin-top:12px;padding:12px;background:#FEF3E2;border-radius:8px;font-size:13px;"><strong>Autre :</strong> ${esc(autre)}</div>`:''}
     <div style="margin-top:16px;font-size:12px;color:var(--slate);">📧 Envoi vers : ${CFG.destinataires.join(' et ')}</div>`;
-
-  ORDER._pendingChantier = chantier;
-  ORDER._pendingNom = nom;
-  ORDER._pendingAutre = autre;
-  ORDER._pendingChD = chD;
-
+  ORDER._pendingChantier=chantier;ORDER._pendingNom=nom;ORDER._pendingAutre=autre;ORDER._pendingChD=chD;
   openModal('modal-confirm');
 }
-
+ 
 function doSendCmd(){
-  const {_pendingChantier:chantier, _pendingNom:nom, _pendingAutre:autre, _pendingChD:chD} = ORDER;
-  const btn = document.getElementById('modal-send-btn');
-  btn.disabled=true; btn.textContent='Envoi...';
-
-  const now = new Date();
-  const date = now.toLocaleDateString('fr-BE');
-  const heure = now.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});
-  const lignes = Object.entries(ORDER.produits).map(([nom,qty])=>({nom,qty,livre:false}));
-
-  const htmlEmail = buildEmailHtml(ORDER.client.societe, chantier, chD, nom, date, heure, lignes, autre);
-
+  const{_pendingChantier:chantier,_pendingNom:nom,_pendingAutre:autre,_pendingChD:chD}=ORDER;
+  const btn=document.getElementById('modal-send-btn');
+  btn.disabled=true;btn.textContent='Envoi...';
+  const now=new Date();
+  const date=now.toLocaleDateString('fr-BE');
+  const heure=now.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});
+  const lignes=Object.entries(ORDER.produits).map(([n,qty])=>({nom:n,qty,livre:false}));
+  const htmlEmail=buildEmailHtml(ORDER.client.societe,chantier,chD,nom,date,heure,lignes,autre);
   Promise.allSettled(
-    CFG.destinataires.map(to=>emailjs.send(CFG.emailjsService, CFG.emailjsTemplate,{
-      societe:ORDER.client.societe, chantier, nom, commande:htmlEmail, to_email:to
+    CFG.destinataires.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
+      societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,to_email:to
     }))
   ).then(results=>{
-    btn.disabled=false; btn.textContent='✓ Envoyer';
+    btn.disabled=false;btn.textContent='✓ Envoyer';
     closeModal();
     if(results.some(r=>r.status==='fulfilled')){
-      const cmds = getCommandes();
+      const cmds=getCommandes();
       cmds.unshift({
-        id: uid(), date: now.toISOString(),
-        societe: ORDER.client.societe, clientKey: ORDER.client.key,
-        chantier, adresse: chD?chD.adresse:'',
-        demandeur: nom, autre: autre||'',
-        lignes, statut:'attente'
+        id:uid(),date:now.toISOString(),
+        societe:ORDER.client.societe,clientKey:ORDER.client.key,
+        chantier,adresse:chD?chD.adresse:'',
+        demandeur:nom,autre:autre||'',
+        lignes,statut:'attente'
       });
       saveCommandes(cmds);
       updateSuiviBadge();
       showToast('✓ Commande envoyée !');
+ 
+      // ✅ FIX : réinitialisation SANS reconstruire la grille (pas de saut visuel)
       resetQtys();
-      document.getElementById('ord-nom').value='';
-      document.getElementById('ord-chantier').value='';
-      if(document.getElementById('ord-autre')) document.getElementById('ord-autre').value='';
-      onChantierChange();
-    } else {
-      showToast('Erreur d\'envoi. Vérifiez votre connexion.',true);
+      const nomEl=document.getElementById('ord-nom');
+      const autreEl=document.getElementById('ord-autre');
+      const chantierEl=document.getElementById('ord-chantier');
+      if(nomEl)nomEl.value='';
+      if(autreEl)autreEl.value='';
+      if(chantierEl)chantierEl.value='';
+      const hint=document.getElementById('ord-hint');
+      const prods=document.getElementById('ord-prods');
+      const autreWrap=document.getElementById('ord-autre-wrap');
+      if(hint)hint.style.display='';
+      if(prods)prods.style.display='none';
+      if(autreWrap)autreWrap.style.display='none';
+      ORDER.chantier=null;
+      updateCartBar();
+    }else{
+      showToast("Erreur d'envoi. Vérifiez votre connexion.",true);
     }
   });
 }
-
+ 
 function buildEmailHtml(societe,chantier,chD,nom,date,heure,lignes,autre){
-  return `<div style="font-family:Arial,sans-serif;font-size:14px;color:#0F172A;max-width:600px;">
+  return`<div style="font-family:Arial,sans-serif;font-size:14px;color:#0F172A;max-width:600px;">
 <table style="width:100%;margin-bottom:20px;border-collapse:collapse;">
 <tr>
   <td style="padding:8px 0;"><b>Société :</b> ${esc(societe)}<br><b>Demandeur :</b> ${esc(nom)}</td>
@@ -748,39 +675,26 @@ ${lignes.map((l,i)=>`<tr style="background:${i%2===0?'#fff':'#EBF3FC'}">
 ${autre?`<p style="margin-top:16px;background:#FEF3E2;padding:12px;border-radius:6px;"><b>Autre demande :</b> ${esc(autre)}</p>`:''}
 </div>`;
 }
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  PAGE SUIVI                                              ║
-// ╚══════════════════════════════════════════════════════════╝
-let SF = 'all';
-let SUIVI_SEARCH = '';
-
+ 
+let SF='all',SUIVI_SEARCH='';
 function renderSuivi(){
-  const cmds = getCommandes();
-  const el = document.getElementById('pg-suivi');
+  const cmds=getCommandes(),el=document.getElementById('pg-suivi');
   const att=cmds.filter(c=>c.statut==='attente').length;
   const par=cmds.filter(c=>c.statut==='partielle').length;
   const liv=cmds.filter(c=>c.statut==='livree').length;
-
-  const filt = cmds.filter(c=>{
-    if(SF!=='all' && c.statut!==SF) return false;
-    if(SUIVI_SEARCH){
-      const q=SUIVI_SEARCH.toLowerCase();
-      return c.societe.toLowerCase().includes(q)||c.chantier.toLowerCase().includes(q)||c.demandeur.toLowerCase().includes(q);
-    }
+  const filt=cmds.filter(c=>{
+    if(SF!=='all'&&c.statut!==SF)return false;
+    if(SUIVI_SEARCH){const q=SUIVI_SEARCH.toLowerCase();return c.societe.toLowerCase().includes(q)||c.chantier.toLowerCase().includes(q)||c.demandeur.toLowerCase().includes(q);}
     return true;
   });
-
-  el.innerHTML = `
+  el.innerHTML=`
     <div class="pg-title">Suivi des livraisons</div>
     <div class="pg-sub">${cmds.length} commande${cmds.length!==1?'s':''} enregistrée${cmds.length!==1?'s':''}</div>
-
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-num" style="color:var(--amber);">${att}</div><div class="stat-lbl">En attente</div></div>
       <div class="stat-box"><div class="stat-num" style="color:var(--blue);">${par}</div><div class="stat-lbl">En cours</div></div>
       <div class="stat-box"><div class="stat-num" style="color:var(--green);">${liv}</div><div class="stat-lbl">Livrées</div></div>
     </div>
-
     <div class="filters">
       ${[['all','Toutes',cmds.length],['attente','En attente',att],['partielle','En cours',par],['livree','Livrées',liv]].map(([f,l,n])=>
         `<button class="fbtn${SF===f?' on':''}" onclick="setSF('${f}')">${l} <span style="opacity:.7">(${n})</span></button>`
@@ -788,27 +702,22 @@ function renderSuivi(){
       <div class="spacer"></div>
       ${liv>0?`<button class="btn btn-danger btn-sm" onclick="clearLiv()">🗑 Supprimer livrées</button>`:''}
     </div>
-
     <div class="search-wrap" style="margin-bottom:16px;">
       <span class="search-icon">🔍</span>
       <input type="text" placeholder="Rechercher société, chantier, demandeur..." value="${esc(SUIVI_SEARCH)}" oninput="SUIVI_SEARCH=this.value;renderSuivi()">
     </div>
-
     ${filt.length===0
-      ? `<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Aucune commande</div><div class="empty-sub">Pas de commande dans cette catégorie.</div></div>`
-      : filt.map(c=>buildCmdRow(c)).join('')}`;
-
+      ?`<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Aucune commande</div><div class="empty-sub">Pas de commande dans cette catégorie.</div></div>`
+      :filt.map(c=>buildCmdRow(c)).join('')}`;
   updateSuiviBadge();
 }
-
 function buildCmdRow(c){
-  const nl=c.lignes.length, ll=c.lignes.filter(l=>l.livre).length;
-  let cls='', pill='';
+  const nl=c.lignes.length,ll=c.lignes.filter(l=>l.livre).length;
+  let cls='',pill='';
   if(c.statut==='livree'){cls=' done';pill=`<span class="pill pill-done">✓ Livré</span>`;}
   else if(c.statut==='partielle'){cls=' part';pill=`<span class="pill pill-part">${ll}/${nl} livrés</span>`;}
   else pill=`<span class="pill pill-wait">En attente</span>`;
-
-  return `<div class="cmd-row${cls}" id="row_${c.id}">
+  return`<div class="cmd-row${cls}" id="row_${c.id}">
   <div class="cmd-head" onclick="togDet('${c.id}')">
     <div class="cmd-info">
       <div class="cmd-ttl">${esc(c.societe)} · ${esc(c.chantier)}</div>
@@ -819,11 +728,7 @@ function buildCmdRow(c){
   </div>
   <div class="cmd-body" id="det_${c.id}">
     <table class="suivi-table">
-      <thead><tr>
-        <th style="width:50%">Produit</th>
-        <th style="width:70px;text-align:center">Qté</th>
-        <th>Livraison</th>
-      </tr></thead>
+      <thead><tr><th style="width:50%">Produit</th><th style="width:70px;text-align:center">Qté</th><th>Livraison</th></tr></thead>
       <tbody>
         ${c.lignes.map((l,i)=>`<tr>
           <td>${esc(l.nom)}</td>
@@ -843,75 +748,57 @@ function buildCmdRow(c){
   </div>
 </div>`;
 }
-
-function togDet(id){ document.getElementById('det_'+id).classList.toggle('open'); }
-
+function togDet(id){document.getElementById('det_'+id).classList.toggle('open');}
 function togLiv(id,idx,v){
-  const cmds=getCommandes(), c=cmds.find(x=>x.id===id); if(!c)return;
+  const cmds=getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
   c.lignes[idx].livre=v;
   const lbl=document.getElementById('cl_'+id+'_'+idx);
-  if(lbl){ lbl.className='chk-lbl'+(v?' done':''); lbl.querySelector('.lbl-txt').textContent=v?'Livré':'À livrer'; }
+  if(lbl){lbl.className='chk-lbl'+(v?' done':'');lbl.querySelector('.lbl-txt').textContent=v?'Livré':'À livrer';}
   const ll=c.lignes.filter(l=>l.livre).length;
-  c.statut = ll===0?'attente':ll===c.lignes.length?'livree':'partielle';
-  saveCommandes(cmds);
-  updRowStyle(c, ll);
-  updateSuiviBadge();
+  c.statut=ll===0?'attente':ll===c.lignes.length?'livree':'partielle';
+  saveCommandes(cmds);updRowStyle(c,ll);updateSuiviBadge();
 }
-
-function updRowStyle(c, ll){
-  const row=document.getElementById('row_'+c.id); if(!row)return;
+function updRowStyle(c,ll){
+  const row=document.getElementById('row_'+c.id);if(!row)return;
   row.className='cmd-row'+(c.statut==='livree'?' done':c.statut==='partielle'?' part':'');
-  const pill=document.getElementById('pill_'+c.id); if(!pill)return;
-  if(c.statut==='livree') pill.innerHTML=`<span class="pill pill-done">✓ Livré</span>`;
-  else if(c.statut==='partielle') pill.innerHTML=`<span class="pill pill-part">${ll}/${c.lignes.length} livrés</span>`;
+  const pill=document.getElementById('pill_'+c.id);if(!pill)return;
+  if(c.statut==='livree')pill.innerHTML=`<span class="pill pill-done">✓ Livré</span>`;
+  else if(c.statut==='partielle')pill.innerHTML=`<span class="pill pill-part">${ll}/${c.lignes.length} livrés</span>`;
   else pill.innerHTML=`<span class="pill pill-wait">En attente</span>`;
 }
-
 function markAll(id){
-  const cmds=getCommandes(), c=cmds.find(x=>x.id===id); if(!c)return;
+  const cmds=getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
   c.lignes.forEach((l,i)=>{
     l.livre=true;
     const lbl=document.getElementById('cl_'+id+'_'+i);
-    if(lbl){ lbl.className='chk-lbl done'; lbl.querySelector('.lbl-txt').textContent='Livré'; lbl.querySelector('input').checked=true; }
+    if(lbl){lbl.className='chk-lbl done';lbl.querySelector('.lbl-txt').textContent='Livré';lbl.querySelector('input').checked=true;}
   });
-  c.statut='livree'; saveCommandes(cmds);
-  updRowStyle(c, c.lignes.length);
-  showToast('✓ Commande livrée');
-  updateSuiviBadge();
+  c.statut='livree';saveCommandes(cmds);updRowStyle(c,c.lignes.length);showToast('✓ Commande livrée');updateSuiviBadge();
 }
-
-function delCmd(id){ if(!confirm('Supprimer cette commande ?'))return; saveCommandes(getCommandes().filter(c=>c.id!==id)); renderSuivi(); }
-function clearLiv(){ if(!confirm('Supprimer toutes les commandes livrées ?'))return; saveCommandes(getCommandes().filter(c=>c.statut!=='livree')); renderSuivi(); }
-function setSF(f){ SF=f; renderSuivi(); }
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  PAGE ADMIN                                              ║
-// ╚══════════════════════════════════════════════════════════╝
-let ADM = { client:null, chantier:null, tab:'clients', selProds:new Set() };
-
+function delCmd(id){if(!confirm('Supprimer cette commande ?'))return;saveCommandes(getCommandes().filter(c=>c.id!==id));renderSuivi();}
+function clearLiv(){if(!confirm('Supprimer toutes les commandes livrées ?'))return;saveCommandes(getCommandes().filter(c=>c.statut!=='livree'));renderSuivi();}
+function setSF(f){SF=f;renderSuivi();}
+ 
+let ADM={client:null,chantier:null,tab:'clients',selProds:new Set()};
 function renderAdmin(){
-  const el = document.getElementById('pg-admin');
-  if(ADM.client && ADM.chantier){ renderAdminChantier(); return; }
-  if(ADM.client){ renderAdminClient(); return; }
-
-  const clients = getClients();
-  el.innerHTML = `
+  const el=document.getElementById('pg-admin');
+  if(ADM.client&&ADM.chantier){renderAdminChantier();return;}
+  if(ADM.client){renderAdminClient();return;}
+  const clients=getClients();
+  el.innerHTML=`
     <div class="pg-title">Administration</div>
     <div class="pg-sub">Gérez les clients, chantiers et produits autorisés</div>
-
     <div class="admin-tabs">
       <div class="atab${ADM.tab==='clients'?' on':''}" onclick="ADM.tab='clients';renderAdmin()">Clients & Chantiers</div>
       <div class="atab${ADM.tab==='produits'?' on':''}" onclick="ADM.tab='produits';renderAdmin()">Catalogue produits</div>
       <div class="atab${ADM.tab==='config'?' on':''}" onclick="ADM.tab='config';renderAdmin()">Configuration</div>
     </div>
-
     ${ADM.tab==='clients'?renderAdminClients(clients):''}
     ${ADM.tab==='produits'?renderAdminProduits():''}
     ${ADM.tab==='config'?renderAdminConfig():''}`;
 }
-
 function renderAdminClients(clients){
-  return `
+  return`
     <div class="toolbar">
       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">${clients.length} clients</div>
       <div class="spacer"></div>
@@ -922,19 +809,16 @@ function renderAdminClients(clients){
     <div class="client-list">
       ${clients.map(c=>{
         const cfg=c.chantiers.filter(ch=>getChantierProds(c.key,ch.nom)!==null).length;
-        return `<div class="client-item" onclick="ADM.client='${c.key}';ADM.chantier=null;renderAdmin()">
-          <div style="flex:1;">
-            <div class="client-name">${esc(c.societe)}</div>
-            <div class="client-meta">${c.chantiers.length} chantier${c.chantiers.length>1?'s':''}${cfg>0?` · <span style="color:var(--green);">${cfg} configuré${cfg>1?'s':''}</span>`:''}</div>
-          </div>
+        return`<div class="client-item" onclick="ADM.client='${c.key}';ADM.chantier=null;renderAdmin()">
+          <div style="flex:1;"><div class="client-name">${esc(c.societe)}</div>
+          <div class="client-meta">${c.chantiers.length} chantier${c.chantiers.length>1?'s':''}${cfg>0?` · <span style="color:var(--green);">${cfg} configuré${cfg>1?'s':''}</span>`:''}</div></div>
           <span style="color:var(--slate);font-size:20px;">›</span>
         </div>`;
       }).join('')}
     </div>`;
 }
-
 function showAddClient(){
-  document.getElementById('add-client-form').innerHTML = `
+  document.getElementById('add-client-form').innerHTML=`
     <div class="inline-form">
       <div class="frow" style="margin-bottom:10px;">
         <div class="fgroup"><label class="flabel">Nom de la société</label><input type="text" id="nc-societe" placeholder="Ex: ACME Clean"></div>
@@ -946,31 +830,24 @@ function showAddClient(){
       </div>
     </div>`;
 }
-
 function doAddClient(){
   const societe=document.getElementById('nc-societe').value.trim();
   const key=document.getElementById('nc-key').value.trim().replace(/\s+/g,'_');
-  if(!societe||!key){ showToast('Remplissez tous les champs',true); return; }
+  if(!societe||!key){showToast('Remplissez tous les champs',true);return;}
   const clients=getClients();
-  if(clients.find(c=>c.key===key)){ showToast('Cette clé existe déjà',true); return; }
+  if(clients.find(c=>c.key===key)){showToast('Cette clé existe déjà',true);return;}
   clients.push({key,societe,chantiers:[{nom:'Chantier 1',adresse:''}]});
-  saveClients(clients);
-  showToast('✓ Client créé');
-  renderAdmin();
+  saveClients(clients);showToast('✓ Client créé');renderAdmin();
 }
-
 function renderAdminClient(){
-  const clients=getClients();
-  const c=clients.find(x=>x.key===ADM.client);
-  if(!c){ ADM.client=null; renderAdmin(); return; }
+  const clients=getClients(),c=clients.find(x=>x.key===ADM.client);
+  if(!c){ADM.client=null;renderAdmin();return;}
   const el=document.getElementById('pg-admin');
   const link=location.origin+location.pathname+'?client='+c.key;
-
   el.innerHTML=`
     <div class="bc"><a onclick="ADM.client=null;ADM.chantier=null;renderAdmin()">Admin</a><span class="bc-sep">›</span>${esc(c.societe)}</div>
     <div class="pg-title">${esc(c.societe)}</div>
     <div class="pg-sub">Gérez les chantiers et les produits autorisés</div>
-
     <div class="card">
       <div class="card-title">Lien de commande client</div>
       <div class="link-box">
@@ -978,7 +855,6 @@ function renderAdminClient(){
         <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${esc(link)}').then(()=>showToast('Lien copié !'))">Copier</button>
       </div>
     </div>
-
     <div class="toolbar">
       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Chantiers</div>
       <div class="spacer"></div>
@@ -988,9 +864,8 @@ function renderAdminClient(){
     <div id="add-chantier-form"></div>
     <div class="chantier-grid">
       ${c.chantiers.map(ch=>{
-        const pr=getChantierProds(c.key,ch.nom);
-        const cnt=pr?pr.length:ALL_PRODUCTS.length;
-        return `<div class="chantier-card" onclick="ADM.chantier='${encodeURIComponent(ch.nom)}';renderAdmin()">
+        const pr=getChantierProds(c.key,ch.nom),cnt=pr?pr.length:ALL_PRODUCTS.length;
+        return`<div class="chantier-card" onclick="ADM.chantier='${encodeURIComponent(ch.nom)}';renderAdmin()">
           <div class="chantier-name">${esc(ch.nom)}</div>
           ${ch.adresse?`<div class="chantier-addr">${esc(ch.adresse)}</div>`:'<div style="height:4px;"></div>'}
           ${pr!==null?`<span class="badge badge-green">${cnt} produit${cnt>1?'s':''}</span>`:`<span class="badge badge-slate">Tous les produits</span>`}
@@ -999,7 +874,6 @@ function renderAdminClient(){
       }).join('')}
     </div>`;
 }
-
 function showAddChantier(ck){
   document.getElementById('add-chantier-form').innerHTML=`
     <div class="inline-form">
@@ -1013,133 +887,101 @@ function showAddChantier(ck){
       </div>
     </div>`;
 }
-
 function doAddChantier(ck){
   const nom=document.getElementById('nch-nom').value.trim();
   const adresse=document.getElementById('nch-addr').value.trim();
-  if(!nom){ showToast('Nom requis',true); return; }
-  const clients=getClients();
-  const c=clients.find(x=>x.key===ck);
-  if(!c)return;
-  c.chantiers.push({nom,adresse});
-  saveClients(clients);
-  showToast('✓ Chantier ajouté');
-  renderAdmin();
+  if(!nom){showToast('Nom requis',true);return;}
+  const clients=getClients(),c=clients.find(x=>x.key===ck);if(!c)return;
+  c.chantiers.push({nom,adresse});saveClients(clients);showToast('✓ Chantier ajouté');renderAdmin();
 }
-
 function deleteClient(ck){
   if(!confirm('Supprimer ce client et tous ses chantiers ?'))return;
-  const clients=getClients().filter(c=>c.key!==ck);
-  saveClients(clients);
-  ADM.client=null; ADM.chantier=null;
-  showToast('Client supprimé');
-  renderAdmin();
+  saveClients(getClients().filter(c=>c.key!==ck));
+  ADM.client=null;ADM.chantier=null;showToast('Client supprimé');renderAdmin();
 }
-
 function renderAdminChantier(){
-  const clients=getClients();
-  const c=clients.find(x=>x.key===ADM.client);
+  const clients=getClients(),c=clients.find(x=>x.key===ADM.client);
   const chNom=decodeURIComponent(ADM.chantier);
   const chD=c?c.chantiers.find(x=>x.nom===chNom):null;
-  if(!c||!chD){ ADM.chantier=null; renderAdmin(); return; }
-
-  const cur=getChantierProds(ADM.client, chNom);
-  ADM.selProds = new Set(cur||ALL_PRODUCTS.map(p=>p.nom));
-
+  if(!c||!chD){ADM.chantier=null;renderAdmin();return;}
+  const cur=getChantierProds(ADM.client,chNom);
+  ADM.selProds=new Set(cur||ALL_PRODUCTS.map(p=>p.nom));
   const el=document.getElementById('pg-admin');
   el.innerHTML=`
     <div class="bc">
       <a onclick="ADM.client=null;ADM.chantier=null;renderAdmin()">Admin</a>
       <span class="bc-sep">›</span>
       <a onclick="ADM.chantier=null;renderAdmin()">${esc(c.societe)}</a>
-      <span class="bc-sep">›</span>
-      ${esc(chNom)}
+      <span class="bc-sep">›</span>${esc(chNom)}
     </div>
     <div class="pg-title">${esc(chNom)}</div>
     <div class="pg-sub">${chD.adresse?esc(chD.adresse)+' · ':''}Sélectionnez les produits autorisés pour ce chantier</div>
-
     <div class="toolbar">
       <button class="btn btn-ghost btn-sm" onclick="selAllP(true)">Tout sélectionner</button>
       <button class="btn btn-ghost btn-sm" onclick="selAllP(false)">Tout désélectionner</button>
       <div class="spacer"></div>
       <span class="badge badge-blue" id="psel-cnt" style="font-size:13px;padding:5px 12px;">${ADM.selProds.size} / ${ALL_PRODUCTS.length}</span>
     </div>
-
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input type="text" placeholder="Filtrer les produits..." oninput="filterProdAdmin(this.value)">
     </div>
-
     <div class="prod-check-grid" id="prod-check-grid">
       ${ALL_PRODUCTS.map(p=>{
-        const e=encodeURIComponent(p.nom), on=ADM.selProds.has(p.nom);
-        return `<div class="pci${on?' on':''}" id="pci_${e}" onclick="togP('${e}')">
+        const e=encodeURIComponent(p.nom),on=ADM.selProds.has(p.nom);
+        return`<div class="pci${on?' on':''}" id="pci_${e}" onclick="togP('${e}')">
           <input type="checkbox"${on?' checked':''} id="chk_${e}" onclick="event.stopPropagation();togP('${e}')">
           <label class="pci-lbl" for="chk_${e}" onclick="event.preventDefault()">${esc(p.nom)}</label>
         </div>`;
       }).join('')}
     </div>
-
     <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="saveProdsConfig()">Enregistrer</button>
       <button class="btn btn-ghost" onclick="ADM.chantier=null;renderAdmin()">Annuler</button>
       ${cur!==null?`<button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="resetProdsConfig()">Réinitialiser (tous)</button>`:''}
     </div>`;
 }
-
 function filterProdAdmin(q){
   const q2=q.toLowerCase();
   document.querySelectorAll('.pci').forEach(el=>{
-    const lbl=el.querySelector('.pci-lbl').textContent.toLowerCase();
-    el.style.display=lbl.includes(q2)?'':'none';
+    el.style.display=el.querySelector('.pci-lbl').textContent.toLowerCase().includes(q2)?'':'none';
   });
 }
-
 function togP(e){
   const n=decodeURIComponent(e);
-  const item=document.getElementById('pci_'+e), chk=document.getElementById('chk_'+e);
-  if(ADM.selProds.has(n)){ ADM.selProds.delete(n); item.classList.remove('on'); chk.checked=false; }
-  else { ADM.selProds.add(n); item.classList.add('on'); chk.checked=true; }
+  const item=document.getElementById('pci_'+e),chk=document.getElementById('chk_'+e);
+  if(ADM.selProds.has(n)){ADM.selProds.delete(n);item.classList.remove('on');chk.checked=false;}
+  else{ADM.selProds.add(n);item.classList.add('on');chk.checked=true;}
   document.getElementById('psel-cnt').textContent=ADM.selProds.size+' / '+ALL_PRODUCTS.length;
 }
-
 function selAllP(v){
   ALL_PRODUCTS.forEach(p=>{
-    const e=encodeURIComponent(p.nom), item=document.getElementById('pci_'+e), chk=document.getElementById('chk_'+e);
-    if(v){ ADM.selProds.add(p.nom); item.classList.add('on'); chk.checked=true; }
-    else { ADM.selProds.delete(p.nom); item.classList.remove('on'); chk.checked=false; }
+    const e=encodeURIComponent(p.nom),item=document.getElementById('pci_'+e),chk=document.getElementById('chk_'+e);
+    if(v){ADM.selProds.add(p.nom);item.classList.add('on');chk.checked=true;}
+    else{ADM.selProds.delete(p.nom);item.classList.remove('on');chk.checked=false;}
   });
   document.getElementById('psel-cnt').textContent=ADM.selProds.size+' / '+ALL_PRODUCTS.length;
 }
-
 function saveProdsConfig(){
   const chNom=decodeURIComponent(ADM.chantier);
-  setChantierProds(ADM.client, chNom, ALL_PRODUCTS.filter(p=>ADM.selProds.has(p.nom)).map(p=>p.nom));
+  setChantierProds(ADM.client,chNom,ALL_PRODUCTS.filter(p=>ADM.selProds.has(p.nom)).map(p=>p.nom));
   showToast('✓ Configuration enregistrée');
-  setTimeout(()=>{ ADM.chantier=null; renderAdmin(); }, 600);
+  setTimeout(()=>{ADM.chantier=null;renderAdmin();},600);
 }
-
 function resetProdsConfig(){
-  const chNom=decodeURIComponent(ADM.chantier);
-  delChantierProds(ADM.client, chNom);
+  delChantierProds(ADM.client,decodeURIComponent(ADM.chantier));
   showToast('Réinitialisé — tous les produits visibles');
-  setTimeout(()=>{ ADM.chantier=null; renderAdmin(); }, 600);
+  setTimeout(()=>{ADM.chantier=null;renderAdmin();},600);
 }
-
 function renderAdminProduits(){
-  return `
+  return`
     <div class="alert alert-warn">⚠️ Le catalogue produits est défini dans le code source. Contactez votre développeur pour modifier la liste.</div>
     <div class="prod-check-grid">
-      ${ALL_PRODUCTS.map(p=>`
-        <div class="pci on" style="cursor:default;">
-          <span style="font-size:16px;">📦</span>
-          <span class="pci-lbl">${esc(p.nom)}</span>
-        </div>`).join('')}
+      ${ALL_PRODUCTS.map(p=>`<div class="pci on" style="cursor:default;"><span style="font-size:16px;">📦</span><span class="pci-lbl">${esc(p.nom)}</span></div>`).join('')}
     </div>`;
 }
-
 function renderAdminConfig(){
-  return `
+  return`
     <div class="card">
       <div class="card-title">Destinataires email</div>
       <p style="font-size:13px;color:var(--slate);margin-bottom:12px;">Les commandes sont envoyées aux adresses suivantes :</p>
@@ -1156,50 +998,30 @@ function renderAdminConfig(){
     </div>
     <div class="card">
       <div class="card-title">Réinitialiser clients</div>
-      <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">Restaurer la liste des clients d'origine (les configurations de produits sont conservées).</p>
+      <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">Restaurer la liste des clients d'origine.</p>
       <button class="btn btn-ghost btn-sm" onclick="resetClients()">↩ Réinitialiser la liste clients</button>
     </div>`;
 }
-
 function exportData(){
-  const data = {
-    commandes: getCommandes(),
-    clients: getClients(),
-    exportDate: new Date().toISOString()
-  };
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='actif-service-data-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+  const data={commandes:getCommandes(),clients:getClients(),exportDate:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='actif-service-data-'+new Date().toISOString().slice(0,10)+'.json';a.click();
   showToast('✓ Données exportées');
 }
-
 function clearAllData(){
   if(!confirm('Effacer toutes les commandes et configurations ? Cette action est irréversible.'))return;
-  localStorage.clear();
-  showToast('Données effacées');
-  renderAdmin();
+  localStorage.clear();showToast('Données effacées');renderAdmin();
 }
-
 function resetClients(){
-  if(!confirm('Restaurer la liste d\'origine ? Les configurations de produits sont conservées.'))return;
-  saveClients(DEFAULT_CLIENTS);
-  showToast('✓ Clients réinitialisés');
-  ADM.client=null; ADM.chantier=null;
-  renderAdmin();
+  if(!confirm("Restaurer la liste d'origine ?"))return;
+  saveClients(DEFAULT_CLIENTS);showToast('✓ Clients réinitialisés');
+  ADM.client=null;ADM.chantier=null;renderAdmin();
 }
-
-// ╔══════════════════════════════════════════════════════════╗
-// ║  INIT                                                    ║
-// ╚══════════════════════════════════════════════════════════╝
+ 
 document.getElementById('main-nav').style.display='flex';
 updateSuiviBadge();
-
-const _p=new URLSearchParams(location.search);
-if(_p.get('client')){
-  goTab('order');
-} else {
-  goTab('order');
-}
+goTab('order');
 </script>
 </body>
 </html>

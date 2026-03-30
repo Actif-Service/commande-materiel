@@ -52,7 +52,7 @@ textarea{resize:vertical;min-height:80px;}
 .btn-danger{background:var(--red-light);color:var(--red);border:1px solid rgba(185,28,28,.15);}
 .btn-danger:hover{background:#FCA5A5;color:var(--red);}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;}
- 
+
 /* ══════════════════════════════════════
    GRILLE PRODUITS — STABLE (fix principal)
    ══════════════════════════════════════ */
@@ -74,7 +74,7 @@ textarea{resize:vertical;min-height:80px;}
 }
 .prod-card:hover{border-color:var(--blue-2);box-shadow:0 4px 12px rgba(27,95,168,.12);}
 .prod-card.has-qty{border-color:var(--blue);background:var(--blue-light);}
- 
+
 /* Conteneur image à hauteur FIXE — empêche le saut de layout */
 .prod-img-wrap{
   width:100%;
@@ -106,7 +106,7 @@ textarea{resize:vertical;min-height:80px;}
   transition:opacity .25s;
 }
 .prod-img.loaded{opacity:1;}
- 
+
 /* Nom à hauteur fixe — cartes toutes identiques */
 .prod-name{
   font-size:11px;
@@ -124,7 +124,7 @@ textarea{resize:vertical;min-height:80px;}
 .prod-card.has-qty .qty-btn{border-color:var(--blue-2);}
 .qty-inp{width:36px;text-align:center;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-weight:700;padding:3px 0;color:var(--text);background:transparent;outline:none;}
 .qty-inp:focus{border-color:var(--blue-2);}
- 
+
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;gap:4px;}
 .badge-blue{background:var(--blue-light);color:var(--blue);}
 .badge-green{background:var(--green-light);color:var(--green);}
@@ -231,9 +231,9 @@ textarea{resize:vertical;min-height:80px;}
 </style>
 </head>
 <body>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <div class="modal-bg" id="modal-confirm">
   <div class="modal">
     <div class="modal-title">📦 Confirmer la commande</div>
@@ -244,7 +244,7 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
- 
+
 <div class="modal-bg" id="modal-login">
   <div class="modal" style="max-width:380px;">
     <div class="modal-title">🔐 Espace Administration</div>
@@ -258,7 +258,7 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
- 
+
 <nav class="nav" id="main-nav" style="display:none;">
   <div class="nav-brand">
     <img class="nav-logo-img" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="Actif Service" onerror="this.style.display='none'">
@@ -272,11 +272,11 @@ textarea{resize:vertical;min-height:80px;}
     <button class="ntab" id="tab-admin" onclick="goTabAdmin()">Admin</button>
   </div>
 </nav>
- 
+
 <div class="page on" id="pg-order"></div>
 <div class="page" id="pg-suivi"></div>
 <div class="page" id="pg-admin"></div>
- 
+
 <div class="cart-bar" id="cart-bar">
   <div class="cart-inner">
     <div class="cart-pill" onclick="openConfirm()">
@@ -286,10 +286,10 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 </div>
- 
+
 <script>
 (function(){ emailjs.init("UIMYUuF1YijZh1DFI"); })();
- 
+
 const CFG = {
   emailjsService: "service_kt6gmbs",
   emailjsTemplate: "template_53rynh4",
@@ -297,7 +297,7 @@ const CFG = {
   adminPw: "actif2024",
   appTitle: "Actif Service"
 };
- 
+
 const ALL_PRODUCTS = [
   {id:"p01",nom:"Ajax citron",img:"https://actif-service.github.io/commande-materiel/images/Ajax%20citron.jpg"},
   {id:"p02",nom:"Glass 2000 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Glass%202000%201%20litre.jpg"},
@@ -305,9 +305,9 @@ const ALL_PRODUCTS = [
   {id:"p04",nom:"Detarsan 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
   {id:"p05",nom:"Dreft 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Dreft%201%20litre.jpg"},
   {id:"p06",nom:"WC Gel avec Javel",img:"https://actif-service.github.io/commande-materiel/images/WC%20Gel%20avec%20Javel.jpg"},
-  {id:"p07",nom:"Gants de ménage Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_S.jpg"},
-  {id:"p08",nom:"Gants de ménage Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_M.jpg"},
-  {id:"p09",nom:"Gants de ménage Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_L.jpg"},
+  {id:"p07",nom:"Gants de ménage Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__S.jpg"},
+  {id:"p08",nom:"Gants de ménage Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__M.jpg"},
+  {id:"p09",nom:"Gants de ménage Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille__L.jpg"},
   {id:"p10",nom:"Gants jetable Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_S.jpg"},
   {id:"p11",nom:"Gants jetable Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_M.jpg"},
   {id:"p12",nom:"Gants jetable Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_jetable_Taille_L.jpg"},
@@ -316,7 +316,7 @@ const ALL_PRODUCTS = [
   {id:"p15",nom:"Ballot 48 rouleaux papier WC",img:"https://actif-service.github.io/commande-materiel/images/Ballot%20-%2048%20rouleaux%20papier%20WC.jpg"},
   {id:"p16",nom:"Papier Zig Zag",img:"https://actif-service.github.io/commande-materiel/images/Papier%20Zig%20Zag.jpg"},
   {id:"p17",nom:"Maxi Jumbo Papernet",img:"https://actif-service.github.io/commande-materiel/images/Maxi%20Jumbo%20Papernet.jpg"},
-  {id:"p18",nom:"Papier Toilette Mini Jumbo",img:"https://actif-service.github.io/commande-materiel/images/Mini%20Jumbo%20Papernet.jpg"},
+  {id:"p18",nom:"Papier Toilette Mini Jumbo",img:"https://actif-service.github.io/commande-materiel/images/Papier%20Toilette%20Mini%20Jumbo.jpg"},
   {id:"p19",nom:"Brosse coco 30 cm",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20coco%2030%20cm.jpg"},
   {id:"p20",nom:"Brosse de rue + manche",img:"https://actif-service.github.io/commande-materiel/images/Brosse%20de%20rue%20+%20manche.jpg"},
   {id:"p21",nom:"Raclette Sol 45 cm",img:"https://actif-service.github.io/commande-materiel/images/Raclette%20Sol%2045%20cm.jpg"},
@@ -331,7 +331,7 @@ const ALL_PRODUCTS = [
   {id:"p30",nom:"Sac aspirateur Aero 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Aero%208.jpg"},
   {id:"p31",nom:"Sac aspirateur Vento 8",img:"https://actif-service.github.io/commande-materiel/images/sac%20aspirateur%20Vento%208.jpg"}
 ];
- 
+
 const DEFAULT_CLIENTS = [
   {key:"Be_Clean",societe:"BE Clean",chantiers:[
     {nom:"AKROPOLIS",adresse:"Luitberg, 25 — 1853 Strombeek-Bever"},
@@ -364,7 +364,7 @@ const DEFAULT_CLIENTS = [
   {key:"Angonet",societe:"Angonet",chantiers:[{nom:"Chantier 1",adresse:""}]},
   {key:"LS_Services",societe:"L & S Services",chantiers:[{nom:"Chantier 1",adresse:""}]}
 ];
- 
+
 const LS={
   get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},
   set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},
@@ -379,11 +379,11 @@ function setChantierProds(ck,cn,v){LS.set('acp_'+ck+'_'+encodeURIComponent(cn),v
 function delChantierProds(ck,cn){LS.del('acp_'+ck+'_'+encodeURIComponent(cn));}
 function isAdminUnlocked(){return sessionStorage.getItem('as_admin')==='1';}
 function unlockAdmin(){sessionStorage.setItem('as_admin','1');}
- 
+
 const esc=s=>s?String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]):'';
 const fmtDate=iso=>{const d=new Date(iso);return d.toLocaleDateString('fr-BE')+' '+d.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
- 
+
 function showToast(msg,err=false){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast show'+(err?' err':'');
@@ -392,7 +392,7 @@ function showToast(msg,err=false){
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(){document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
- 
+
 const TABS=['order','suivi','admin'];
 let currentTab='order';
 function goTab(t){
@@ -421,9 +421,9 @@ function updateSuiviBadge(){
   const b=document.getElementById('badge-suivi');
   b.textContent=n;b.classList.toggle('show',n>0);
 }
- 
+
 let ORDER={client:null,chantier:null,demandeur:'',produits:{}};
- 
+
 function renderOrder(){
   const params=new URLSearchParams(location.search);
   const ck=params.get('client');
@@ -431,7 +431,7 @@ function renderOrder(){
   const client=ck?clients.find(c=>c.key===ck):null;
   const el=document.getElementById('pg-order');
   document.getElementById('main-nav').style.display='';
- 
+
   if(!client&&!ck){
     el.innerHTML=`
       <div class="order-hero">
@@ -451,9 +451,9 @@ function renderOrder(){
     el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Contactez votre responsable Actif Service.</div></div>`;
     return;
   }
- 
+
   ORDER.client=client;ORDER.produits={};ORDER.demandeur='';
- 
+
   el.innerHTML=`
     <div class="order-hero">
       <img class="order-hero-logo" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="logo" onerror="this.style.display='none'">
@@ -497,7 +497,7 @@ function renderOrder(){
     </div>`;
   updateCartBar();
 }
- 
+
 function onChantierChange(){
   const v=document.getElementById('ord-chantier').value;
   const hint=document.getElementById('ord-hint');
@@ -512,7 +512,7 @@ function onChantierChange(){
   renderProdGrid(list);
   updateCartBar();
 }
- 
+
 // ✅ FIX : conteneur image à hauteur fixe, image en position absolute, fade-in au chargement
 function renderProdGrid(list){
   document.getElementById('ord-grid').innerHTML=list.map(p=>{
@@ -532,7 +532,7 @@ function renderProdGrid(list){
     </div>`;
   }).join('');
 }
- 
+
 function filterProds(q){
   const grid=document.getElementById('ord-grid');if(!grid)return;
   const q2=q.toLowerCase();
@@ -565,7 +565,7 @@ function updateCartBar(){
   document.getElementById('cart-desc').textContent=items===1?'produit sélectionné':items+' produits, '+total+' unités';
   document.getElementById('cart-bar').classList.toggle('show',items>0&&!!ORDER.chantier);
 }
- 
+
 function openConfirm(){
   const chantier=document.getElementById('ord-chantier').value;
   const nom=document.getElementById('ord-nom').value.trim();
@@ -596,7 +596,7 @@ function openConfirm(){
   ORDER._pendingChantier=chantier;ORDER._pendingNom=nom;ORDER._pendingAutre=autre;ORDER._pendingChD=chD;
   openModal('modal-confirm');
 }
- 
+
 function doSendCmd(){
   const{_pendingChantier:chantier,_pendingNom:nom,_pendingAutre:autre,_pendingChD:chD}=ORDER;
   const btn=document.getElementById('modal-send-btn');
@@ -625,7 +625,7 @@ function doSendCmd(){
       saveCommandes(cmds);
       updateSuiviBadge();
       showToast('✓ Commande envoyée !');
- 
+
       // ✅ FIX : réinitialisation SANS reconstruire la grille (pas de saut visuel)
       resetQtys();
       const nomEl=document.getElementById('ord-nom');
@@ -647,7 +647,7 @@ function doSendCmd(){
     }
   });
 }
- 
+
 function buildEmailHtml(societe,chantier,chD,nom,date,heure,lignes,autre){
   return`<div style="font-family:Arial,sans-serif;font-size:14px;color:#0F172A;max-width:600px;">
 <table style="width:100%;margin-bottom:20px;border-collapse:collapse;">
@@ -675,7 +675,7 @@ ${lignes.map((l,i)=>`<tr style="background:${i%2===0?'#fff':'#EBF3FC'}">
 ${autre?`<p style="margin-top:16px;background:#FEF3E2;padding:12px;border-radius:6px;"><b>Autre demande :</b> ${esc(autre)}</p>`:''}
 </div>`;
 }
- 
+
 let SF='all',SUIVI_SEARCH='';
 function renderSuivi(){
   const cmds=getCommandes(),el=document.getElementById('pg-suivi');
@@ -778,7 +778,7 @@ function markAll(id){
 function delCmd(id){if(!confirm('Supprimer cette commande ?'))return;saveCommandes(getCommandes().filter(c=>c.id!==id));renderSuivi();}
 function clearLiv(){if(!confirm('Supprimer toutes les commandes livrées ?'))return;saveCommandes(getCommandes().filter(c=>c.statut!=='livree'));renderSuivi();}
 function setSF(f){SF=f;renderSuivi();}
- 
+
 let ADM={client:null,chantier:null,tab:'clients',selProds:new Set()};
 function renderAdmin(){
   const el=document.getElementById('pg-admin');
@@ -1018,7 +1018,7 @@ function resetClients(){
   saveClients(DEFAULT_CLIENTS);showToast('✓ Clients réinitialisés');
   ADM.client=null;ADM.chantier=null;renderAdmin();
 }
- 
+
 document.getElementById('main-nav').style.display='flex';
 updateSuiviBadge();
 goTab('order');

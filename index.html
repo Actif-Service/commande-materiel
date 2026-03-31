@@ -618,6 +618,7 @@ function renderOrder(){
   document.getElementById('main-nav').style.display='';
 
   if(!client&&!ck){
+    clients.sort((a,b)=>a.societe.localeCompare(b.societe,'fr'));
     el.innerHTML=`
       <div class="order-hero">
         <img class="order-hero-logo" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="logo" onerror="this.style.display='none'">

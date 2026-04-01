@@ -548,7 +548,17 @@ const LS={
   set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},
   del:(k)=>{localStorage.removeItem(k);}
 };
-function getClients(){return LS.get('as_clients',DEFAULT_CLIENTS);}
+  const DATA_VERSION = "2";
+  
+function getClients(){
+  const savedVersion = localStorage.getItem('as_clients_version');
+  if(savedVersion !== DATA_VERSION){
+    localStorage.setItem('as_clients_version', DATA_VERSION);
+    saveClients(DEFAULT_CLIENTS);
+    return DEFAULT_CLIENTS;
+  }
+  return LS.get('as_clients',DEFAULT_CLIENTS);
+}
 function saveClients(c){LS.set('as_clients',c);}
 function getCommandes(){return LS.get('as_commandes',[]);}
 function saveCommandes(c){LS.set('as_commandes',c);}

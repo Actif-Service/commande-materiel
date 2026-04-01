@@ -977,6 +977,7 @@ function renderAdmin(){
     ${ADM.tab==='config'?renderAdminConfig():''}`;
 }
 function renderAdminClients(clients){
+  clients = [...clients].sort((a,b) => a.societe.localeCompare(b.societe,'fr'));
   return`
     <div class="toolbar">
       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">${clients.length} clients</div>

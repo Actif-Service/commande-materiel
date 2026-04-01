@@ -623,16 +623,10 @@ function renderOrder(){
   if(!client&&!ck){
     clients.sort((a,b)=>a.societe.localeCompare(b.societe,'fr'));
     el.innerHTML=`
-      <div class="order-hero">
-        <img class="order-hero-logo" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="logo" onerror="this.style.display='none'">
-        <div class="order-hero-text"><h2>Commande de Matériel</h2><p>Sélectionnez votre société pour passer une commande</p></div>
-      </div>
-      <div class="client-list">
-        ${clients.map(c=>`
-          <div class="client-item" onclick="location.href='?client=${c.key}'">
-            <div style="flex:1;"><div class="client-name">${esc(c.societe)}</div><div class="client-meta">${c.chantiers.length} chantier${c.chantiers.length>1?'s':''}</div></div>
-            <span style="color:var(--slate);font-size:20px;">›</span>
-          </div>`).join('')}
+      <div class="empty">
+        <div class="empty-icon">🔒</div>
+        <div class="empty-title">Accès refusé</div>
+        <div class="empty-sub">Vous n'avez pas de lien valide.<br>Contactez votre responsable Actif Service.</div>
       </div>`;
     return;
   }

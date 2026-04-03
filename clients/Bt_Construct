@@ -1,0 +1,20 @@
+{
+  "key": "Bt_Construct",
+  "token": "689hje",
+  "societe": "Bt Construct",
+  "chantiers": [
+    {
+      "nom": "WHITE ATRIUM",
+      "adresse": "Avenue de la Toison d'Or, 56   1060 Saint-Gilles"
+    },
+    {
+      "nom": "COPROPRIETE EQUATEUR",
+      "adresse": "Rue de l'Equateur, 47/4  1180 Uccle"
+    },
+    {
+      "nom": "LOUISE 120",
+      "adresse": "Avenue Louise, 120  1050 Ixelles"
+    }
+  ],
+  "email": "info@clean-aro-invest.com"
+}

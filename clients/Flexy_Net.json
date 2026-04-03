@@ -1,0 +1,35 @@
+{
+  "key": "Flexy_Net",
+  "token": "7XEOSR",
+  "societe": "Flexy Net",
+  "chantiers": [
+    {
+      "nom": "BOEKHOUD EXPERT",
+      "adresse": "Haachtsesteenweg, 377 B9  1910 Kampenhout"
+    },
+    {
+      "nom": "CORE FM",
+      "adresse": "Haachtsesteenweg, 377 B9  1910 Kampenhout"
+    },
+    {
+      "nom": "JOFFRE",
+      "adresse": "Avenue Maréchal Joffre, 84  1190 Forest"
+    },
+    {
+      "nom": "MONEDOIR PARK",
+      "adresse": "Sinta Katharinastraat, 14-16-18  3070 Kortenberg"
+    },
+    {
+      "nom": "PIEREMAN A",
+      "adresse": "Begonialaan, 32-34  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "SIRIUS",
+      "adresse": "Singel, 20  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "VAN RUISBEEK",
+      "adresse": "Haachtsesteenweg, 377  1910 Kampenhout"
+    }
+  ]
+}

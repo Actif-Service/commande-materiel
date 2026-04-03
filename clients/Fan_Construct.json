@@ -1,0 +1,79 @@
+{
+  "key": "Fan_Construct",
+  "token": "pL2DR8",
+  "societe": "Fan Construct / Serge",
+  "chantiers": [
+    {
+      "nom": "ACP VIERGES",
+      "adresse": "Rue des Vierges, 58  1000 Bruxelles"
+    },
+    {
+      "nom": "ANTONY TRANSPORT",
+      "adresse": "Trawoolaan, 1A  1830 Machelen"
+    },
+    {
+      "nom": "ARTS 53",
+      "adresse": "Avenue des Arts, 53  1000 Bruxelles"
+    },
+    {
+      "nom": "BIODYNAMIC FEDERATION",
+      "adresse": "Rue du Trône, 194  1050 Ixelles"
+    },
+    {
+      "nom": "CEPE (4ème)",
+      "adresse": "Boulevard du Triomphe, 172  1160 Auderghem"
+    },
+    {
+      "nom": "COLLIBRA",
+      "adresse": "Rue Picard, 11 (Gare Maritime)  1000 Bruxelles"
+    },
+    {
+      "nom": "ECSWE",
+      "adresse": "Rue du Trône, 194  1050 Ixelles"
+    },
+    {
+      "nom": "ENEA (4ème)",
+      "adresse": "Rue de Namur, 72-74  1000 Bruxelles"
+    },
+    {
+      "nom": "FINTRO (Berlaimont)",
+      "adresse": "Boulevard de l'Impératrice, 56  1000 Bruxelles"
+    },
+    {
+      "nom": "FISC PROTECT",
+      "adresse": "Rue Alfred Dubois, 25  1080 Molenbeek"
+    },
+    {
+      "nom": "HORTICULTEURS",
+      "adresse": "Rue des Horticulteurs, 24  1020 Laeken"
+    },
+    {
+      "nom": "JB ELECTEUR",
+      "adresse": "Rue Leopold 1er, 487  1090 Jette"
+    },
+    {
+      "nom": "LEMONNIER",
+      "adresse": "Boulevard Lemonnier, 94-96  1000 Bruxelles"
+    },
+    {
+      "nom": "LEUVENSESTEENWEG 555",
+      "adresse": "Leuvensesteenweg, 555  1930 Zaventem"
+    },
+    {
+      "nom": "MENCH INDUSTRY",
+      "adresse": "Trawoolaan, 1A  1830 Machelen"
+    },
+    {
+      "nom": "VB-CARS",
+      "adresse": "Trawoolaan, 3-6  1830 Machelen"
+    },
+    {
+      "nom": "PLAN B PORTA",
+      "adresse": "Leuvensesteenweg, 117 & 36  1800 Vilvoorde"
+    },
+    {
+      "nom": "PROTEA",
+      "adresse": "Jan Mulsstraat, 130-132-134  1853 Grimbergen"
+    }
+  ]
+}

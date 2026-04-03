@@ -1,0 +1,43 @@
+{
+  "key": "Aquilabell",
+  "token": "vO8F7w",
+  "societe": "Aquilabell",
+  "chantiers": [
+    {
+      "nom": "CALL INTERNATIONAL",
+      "adresse": "Drève de Richelle, 161  1410 Waterloo"
+    },
+    {
+      "nom": "CONCEPT CONTROL",
+      "adresse": "Drève de Richelle, 161  1410 Waterloo"
+    },
+    {
+      "nom": "ERGON",
+      "adresse": "Drève de Richelle, 161  1410 Waterloo"
+    },
+    {
+      "nom": "EUROPLAFOND",
+      "adresse": "Ruisbroeksesteenweg, 235  1601 Sint-Pieters-Leeuw"
+    },
+    {
+      "nom": "FIABILIS CONSULTING",
+      "adresse": "Boulevard de l'Humanité, 233/10  1620 Drogenbos"
+    },
+    {
+      "nom": "VIVE VERDE",
+      "adresse": "Rue de Laubespin, 82-84-86-104-106  1090 Jette"
+    },
+    {
+      "nom": "RING CONSULT (1ère Agence)",
+      "adresse": "James Ensorlaan, 39  1800 Vilvoorde"
+    },
+    {
+      "nom": "RING CONSULT (2ème Agence)",
+      "adresse": "Nowelei, 26  1800 Vilvoorde"
+    },
+    {
+      "nom": "PETIT ENVOL (Crèche)",
+      "adresse": "Rue au bois, 513  1150 Woluwe Saint-Pierre"
+    }
+  ]
+}

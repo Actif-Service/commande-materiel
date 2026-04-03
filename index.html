@@ -813,7 +813,7 @@ function renderAdminClient(){
   const c=ADM.clients.find(x=>x.key===ADM.client);
   if(!c){ADM.client=null;renderAdmin();return;}
   const el=document.getElementById('pg-admin');
-  const link=location.origin+location.pathname+'?client='+c.key;
+  const link=location.origin+location.pathname+'?client='+c.key+(c.token||'');
   el.innerHTML=`
     <div class="bc"><a onclick="ADM.client=null;ADM.chantier=null;renderAdmin()">Admin</a><span class="bc-sep">›</span>${esc(c.societe)}</div>
     <div class="pg-title">${esc(c.societe)}</div>

@@ -232,7 +232,7 @@ const CFG = {
   emailjsService: "service_kt6gmbs",
   emailjsTemplate: "template_53rynh4",
   destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
-  adminPwHash: "3c7db50ec99a15da76b2194317372198e7afda93e8894aac8267a8ae595064ee",
+  adminPwHash: "3c7db50ec99a15da76b2194317372198e7afda93e8894aac8267a8ae595064ee", // SHA-256
   // Liste des clés valides connues (pour l'onglet Admin uniquement)
   // Les données réelles sont dans clients/{key}.json — non exposées dans ce fichier
   clientKeys: ["Angonet","Aquilabell","Be_Clean","Bostanari","Bruno_Clean","Clean_ARO",
@@ -383,8 +383,11 @@ function goTabAdmin(){
   openModal('modal-login');
 }
 
-function checkAdminPw(){
-  if(document.getElementById('admin-pw').value===CFG.adminPw){
+async function checkAdminPw(){
+  const pw = document.getElementById('admin-pw').value;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash === CFG.adminPwHash){
     unlockAdmin();closeModal();goTab('admin');
   } else {
     showToast('Mot de passe incorrect',true);
@@ -399,7 +402,7 @@ function updateSuiviBadge(){
   b.textContent=n;b.classList.toggle('show',n>0);
 }
 
-let ORDER={client:null,chantier:null,demandeur:'',produits:{}};
+let ORDER={client:null,chantier:null,demandeur:'',email:'',produits:{}};
 
 async function renderOrder(){
   const el=document.getElementById('pg-order');
@@ -429,7 +432,7 @@ async function renderOrder(){
   }
 
   LOADED_CLIENT = client;
-  ORDER.client=client;ORDER.produits={};ORDER.demandeur='';
+  ORDER.client=client;ORDER.produits={};ORDER.demandeur='';ORDER.email=client.email||'';
 
   el.innerHTML=`
     <div class="order-hero">
@@ -449,6 +452,10 @@ async function renderOrder(){
         <div class="fgroup">
           <label class="flabel">Votre nom *</label>
           <input type="text" id="ord-nom" placeholder="Nom et prénom" oninput="ORDER.demandeur=this.value">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Votre email (copie commande) *</label>
+          <input type="email" id="ord-email" placeholder="votre@email.com" oninput="ORDER.email=this.value">
         </div>
       </div>
     </div>
@@ -473,6 +480,9 @@ async function renderOrder(){
       </div>
     </div>`;
   updateCartBar();
+  // Pré-remplir l'email depuis le JSON
+  const emailEl=document.getElementById('ord-email');
+  if(emailEl && ORDER.email) emailEl.value=ORDER.email;
 }
 
 function onChantierChange(){
@@ -547,6 +557,9 @@ function openConfirm(){
   const nom=document.getElementById('ord-nom').value.trim();
   if(!chantier){showToast('Sélectionnez un chantier',true);return;}
   if(!nom){showToast('Indiquez votre nom',true);return;}
+  const email=document.getElementById('ord-email').value.trim();
+  if(!email||!email.includes('@')){showToast('Indiquez votre email',true);return;}
+  ORDER.email=email;
   if(Object.keys(ORDER.produits).length===0){showToast('Sélectionnez au moins un produit',true);return;}
   const lines=Object.entries(ORDER.produits).map(([n,q])=>`
     <tr><td style="padding:8px 12px;border-top:1px solid #E2E8F0;">${esc(n)}</td>
@@ -559,6 +572,7 @@ function openConfirm(){
       <div style="font-size:14px;"><strong>${esc(ORDER.client.societe)}</strong> · ${esc(chantier)}</div>
       ${chD&&chD.adresse?`<div style="font-size:12px;color:var(--slate);margin-top:3px;">${esc(chD.adresse)}</div>`:''}
       <div style="font-size:13px;color:var(--slate);margin-top:6px;">Demandeur : ${esc(nom)}</div>
+      <div style="font-size:13px;color:var(--slate);margin-top:3px;">Email : ${esc(ORDER.email)}</div>
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:13px;">
       <thead><tr style="background:var(--blue-light);">
@@ -582,8 +596,11 @@ function doSendCmd(){
   const heure=now.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});
   const lignes=Object.entries(ORDER.produits).map(([n,qty])=>({nom:n,qty,livre:false}));
   const htmlEmail=buildEmailHtml(ORDER.client.societe,chantier,chD,nom,date,heure,lignes,autre);
+  const email=ORDER.email;
+  // Destinataires : équipe Actif Service + copie au sous-traitant
+  const allDest=[...CFG.destinataires, email];
   Promise.allSettled(
-    CFG.destinataires.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
+    allDest.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
       societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,to_email:to
     }))
   ).then(results=>{
@@ -602,10 +619,13 @@ function doSendCmd(){
       updateSuiviBadge();
       showToast('✓ Commande envoyée !');
       resetQtys();
+      const emailEl=document.getElementById('ord-email');
       const nomEl=document.getElementById('ord-nom');
       const autreEl=document.getElementById('ord-autre');
       const chantierEl=document.getElementById('ord-chantier');
       if(nomEl)nomEl.value='';
+      if(emailEl)emailEl.value='';
+      ORDER.email='';
       if(autreEl)autreEl.value='';
       if(chantierEl)chantierEl.value='';
       const hint=document.getElementById('ord-hint');

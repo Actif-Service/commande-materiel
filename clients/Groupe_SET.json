@@ -1,0 +1,28 @@
+{
+  "key": "Groupe_SET",
+  "token": "nPaz7e",
+  "societe": "Groupe SET / Laura",
+  "chantiers": [
+    {
+      "nom": "CABINET MEDICAL WATERLOO",
+      "adresse": "Avenue Schattens, 29 (-1)  1410 Waterloo"
+    },
+    {
+      "nom": "CENTRE DE RADIOLOGIE",
+      "adresse": "Avenue Schattens, 29 (Rez)  1410 Waterloo"
+    },
+    {
+      "nom": "COIFFURE BENJAMIN LACAILLE",
+      "adresse": "Chaussée de Bruxelles, 632  1410 Waterloo"
+    },
+    {
+      "nom": "COMAP",
+      "adresse": "Alsembergsesteenweg, 454  1653 Dworp"
+    },
+    {
+      "nom": "MONDE SELECTION",
+      "adresse": "Chaussée de Tubize, 242  1440 Wauthier Braine"
+    }
+  ],
+  "email": "groupeset@email.com"
+}

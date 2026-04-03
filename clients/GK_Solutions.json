@@ -1,0 +1,32 @@
+{
+  "key": "GK_Solutions",
+  "token": "OC04sy",
+  "societe": "GK Solutions",
+  "chantiers": [
+    {
+      "nom": "ACP ADELBODEN",
+      "adresse": "Bergdal, 9  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "HEUVELDAL",
+      "adresse": "Heuveldal, 36-38  1853 Strombeek"
+    },
+    {
+      "nom": "JECA INVEST",
+      "adresse": "Limbosweg, 15  1860 Meise"
+    },
+    {
+      "nom": "LUGANO",
+      "adresse": "Bergdal, 5  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "ALICANTE",
+      "adresse": "Ruisbroeksesteenweg, 235  1601 Sint-Pieters-Leeuw"
+    },
+    {
+      "nom": "VME EMILE VERHAEREN",
+      "adresse": "Josef Van Elewijkstraat, 105  1853 Strombeek-Bever"
+    }
+  ],
+  "email": "gksolutions@email.com"
+}

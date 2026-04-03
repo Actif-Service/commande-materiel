@@ -1,0 +1,24 @@
+{
+  "key": "Top_Clean",
+  "token": "eFNfJX",
+  "societe": "Top Clean",
+  "chantiers": [
+    {
+      "nom": "KANTAR INSIGHTS",
+      "adresse": "Boulevard Saint-Lazard, 4  1210 Saint-Josse-ten-Noode"
+    },
+    {
+      "nom": "METAL PACKAGING",
+      "adresse": "Rue de Trèves, 59-61  1040 Etterbeek"
+    },
+    {
+      "nom": "URBANTZ",
+      "adresse": "Avenue Louise, 251  1050 Ixelles"
+    },
+    {
+      "nom": "ARTS 19 (Eglise de Jésus)",
+      "adresse": "Rue d'Idalie, 11-13  1050 Ixelles"
+    }
+  ],
+  "email": "topclean@email.com"
+}

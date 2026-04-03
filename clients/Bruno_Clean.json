@@ -1,0 +1,52 @@
+{
+  "key": "Bruno_Clean",
+  "token": "eGxGuE",
+  "societe": "Bruno Clean",
+  "chantiers": [
+    {
+      "nom": "ABRI SUD",
+      "adresse": "Chaussée de Louvain, 46B  1932 Sint Stevens Woluwe"
+    },
+    {
+      "nom": "CABINET Dentaire VANHOMWEGEN",
+      "adresse": "Avenue Paul Hymans, 1  1200 Bruxelles"
+    },
+    {
+      "nom": "CAMPARI",
+      "adresse": "Rue aux Laines, 70  1000 Bruxelles"
+    },
+    {
+      "nom": "Docteur INES de MERODE",
+      "adresse": "Rue Solleveld, 20  1200 Bruxelles"
+    },
+    {
+      "nom": "LECOT",
+      "adresse": "Boulevard de la 2d Armée Britannique, 67  1190 Forest"
+    },
+    {
+      "nom": "LESBROUSSART",
+      "adresse": "Rue Lesbroussart, 80  1000 Bruxelles"
+    },
+    {
+      "nom": "CITY GATE I",
+      "adresse": "Kerklaan, 67 B/C  1830 Machelen"
+    },
+    {
+      "nom": "CITY GATE II",
+      "adresse": "Kerklaan, 65 B/C/D  1830 Machelen"
+    },
+    {
+      "nom": "CITY GATE III",
+      "adresse": "Kerklaan, 63 B/C/D  1830 Machelen"
+    },
+    {
+      "nom": "MAETERLINCK",
+      "adresse": "J. Van Elewijckstraat, 88-90  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "BOENDAL",
+      "adresse": "Chaussée de Boendal, 190  1050 Ixelles"
+    }
+  ],
+  "email": "brunoclean@email.com"
+}

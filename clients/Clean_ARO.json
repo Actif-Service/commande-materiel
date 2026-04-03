@@ -1,0 +1,72 @@
+{
+  "key": "Clean_ARO",
+  "token": "S99F25",
+  "societe": "Clean ARO",
+  "chantiers": [
+    {
+      "nom": "WHITE ATRIUM",
+      "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles"
+    },
+    {
+      "nom": "STASSART 131",
+      "adresse": "Rue de Stassart, 131  1050 Ixelles"
+    },
+    {
+      "nom": "STASSART 124",
+      "adresse": "Rue de Stassart, 124  1050 Ixelles"
+    },
+    {
+      "nom": "STASSART 122",
+      "adresse": "Rue de Stassart, 122  1050 Ixelles"
+    },
+    {
+      "nom": "STEPHANIE 16",
+      "adresse": "Place Stephanie, 16  1050 Ixelles"
+    },
+    {
+      "nom": "STEPHANIE 14",
+      "adresse": "Place Stephanie, 14  1050 Ixelles"
+    },
+    {
+      "nom": "BLACKFIN",
+      "adresse": "Avenue Louise, 106  1050 Ixelles"
+    },
+    {
+      "nom": "SAS SPB",
+      "adresse": "Avenue Louise, 120  1050 Ixelles"
+    },
+    {
+      "nom": "DELICES ARCHITECTES",
+      "adresse": "Rue de Stassart, 124  1050 Ixelles"
+    },
+    {
+      "nom": "TRANSPERFECT TRADUCTIONS",
+      "adresse": "Avenue Louise, 120 (8ème)  1050 Ixelles"
+    },
+    {
+      "nom": "LIBERATION EUROPE",
+      "adresse": "Rue de Stassart, 131  1050 Ixelles"
+    },
+    {
+      "nom": "6GSNS JU 1er étage",
+      "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles"
+    },
+    {
+      "nom": "GLOBAL HEATH (2ème étage)",
+      "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles"
+    },
+    {
+      "nom": "ACP TOISON D'OR",
+      "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles"
+    },
+    {
+      "nom": "WESHARE AGENCY",
+      "adresse": "Rue des Carmélites, 167 A  1180 Uccle"
+    },
+    {
+      "nom": "FIRST LAW",
+      "adresse": "Avenue Louise, 480  1050 Ixelles"
+    }
+  ],
+  "email": "cleanaro@email.com"
+}

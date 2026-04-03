@@ -1,0 +1,20 @@
+{
+  "key": "LS_Services",
+  "token": "9eXUqa",
+  "societe": "L & S Services",
+  "chantiers": [
+    {
+      "nom": "BOBEX",
+      "adresse": "Quai des Charbonnages, 62  1080 Molenbeek-Saint-Jean"
+    },
+    {
+      "nom": "CONIX",
+      "adresse": "Van Meyelstraat, 30  1080 Molenbeek-Saint-Jean"
+    },
+    {
+      "nom": "EUROPABIO",
+      "adresse": "Avenue des Arts, 53  1000 Bruxelles"
+    }
+  ],
+  "email": "lsservices@email.com"
+}

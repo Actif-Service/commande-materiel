@@ -52,72 +52,20 @@ textarea{resize:vertical;min-height:80px;}
 .btn-danger{background:var(--red-light);color:var(--red);border:1px solid rgba(185,28,28,.15);}
 .btn-danger:hover{background:#FCA5A5;color:var(--red);}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;}
-
-/* ══════════════════════════════════════
-   GRILLE PRODUITS — STABLE (fix principal)
-   ══════════════════════════════════════ */
-.prod-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:10px;
-  margin:16px 0;
-  align-items:start; /* évite l'étirement vertical */
-}
-.prod-card{
-  background:var(--white);
-  border:1.5px solid var(--border);
-  border-radius:10px;
-  overflow:hidden;
-  transition:border-color .15s,box-shadow .15s;
-  display:flex;
-  flex-direction:column;
-}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0;align-items:start;}
+.prod-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s,box-shadow .15s;display:flex;flex-direction:column;}
 .prod-card:hover{border-color:var(--blue-2);box-shadow:0 4px 12px rgba(27,95,168,.12);}
 .prod-card.has-qty{border-color:var(--blue);background:var(--blue-light);}
-
-/* Conteneur image à hauteur FIXE — empêche le saut de layout */
-.prod-img-wrap{
-  width:100%;
-  height:120px;
-  flex-shrink:0;
-  background:#EEF2F7;
-  position:relative;
-  overflow:hidden;
-}
-/* Icône placeholder visible avant chargement */
-.prod-img-wrap::after{
-  content:'';
-  pointer-events:none;
-}
-.prod-img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  position:absolute;
-  top:0;left:0;
-  opacity:0;
-  transition:opacity .25s;
-}
+.prod-img-wrap{width:100%;height:120px;flex-shrink:0;background:#EEF2F7;position:relative;overflow:hidden;}
+.prod-img{width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity .25s;}
 .prod-img.loaded{opacity:1;}
-
-/* Nom à hauteur fixe — cartes toutes identiques */
-.prod-name{
-  font-size:11px;
-  font-weight:500;
-  padding:7px 8px 4px;
-  line-height:1.35;
-  height:36px;
-  overflow:hidden;
-  color:var(--text);
-  flex-shrink:0;
-}
+.prod-name{font-size:11px;font-weight:500;padding:7px 8px 4px;line-height:1.35;height:36px;overflow:hidden;color:var(--text);flex-shrink:0;}
 .qty-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px 9px;flex-shrink:0;}
 .qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text);transition:.1s;line-height:1;}
 .qty-btn:hover{background:var(--blue-light);border-color:var(--blue-2);color:var(--blue);}
 .prod-card.has-qty .qty-btn{border-color:var(--blue-2);}
 .qty-inp{width:36px;text-align:center;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-weight:700;padding:3px 0;color:var(--text);background:transparent;outline:none;}
 .qty-inp:focus{border-color:var(--blue-2);}
-
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;gap:4px;}
 .badge-blue{background:var(--blue-light);color:var(--blue);}
 .badge-green{background:var(--green-light);color:var(--green);}
@@ -211,6 +159,9 @@ textarea{resize:vertical;min-height:80px;}
 .empty-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text);}
 .empty-sub{font-size:13px;}
 .inline-form{background:#F8FAFC;border:1.5px dashed var(--border);border-radius:10px;padding:16px;margin-top:12px;}
+.loading{display:flex;align-items:center;justify-content:center;padding:60px 16px;gap:12px;color:var(--slate);font-size:14px;}
+.spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
 @media(max-width:640px){
   .nav{padding:0 14px;}
   .page{padding:20px 14px;}
@@ -257,13 +208,7 @@ textarea{resize:vertical;min-height:80px;}
     <img class="nav-logo-img" src="https://actif-service.github.io/Commande-Produits/images/logo.jpg" alt="Actif Service" onerror="this.style.display='none'">
     <span class="nav-title">Actif Service</span>
   </div>
-  <div class="nav-pill">
-    <button class="ntab on" id="tab-order" onclick="goTab('order')">Commande</button>
-    <button class="ntab" id="tab-suivi" onclick="goTab('suivi')">
-      Livraisons <span class="nav-badge" id="badge-suivi"></span>
-    </button>
-    <button class="ntab" id="tab-admin" onclick="goTabAdmin()">Admin</button>
-  </div>
+  <div class="nav-pill" id="nav-pill"></div>
 </nav>
 
 <div class="page on" id="pg-order"></div>
@@ -288,8 +233,27 @@ const CFG = {
   emailjsTemplate: "template_53rynh4",
   destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
   adminPw: "actif2024",
-  appTitle: "Actif Service"
+  // Liste des clés valides connues (pour l'onglet Admin uniquement)
+  // Les données réelles sont dans clients/{key}.json — non exposées dans ce fichier
+  clientKeys: ["Angonet","Aquilabell","Be_Clean","Bostanari","Bruno_Clean","Clean_ARO",
+    "COM_Invest","Efata_Clean","Fa_Clean","Fan_Construct","Flexy_Net","Garcia",
+    "Ghita_Marius","GK_Solutions","Group_Guima","Groupe_SET","LS_Services",
+    "OANA","Rose_Group","Top_Clean","Viana_Cleaning"]
 };
+
+// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+//  MODE : sous-traitant (?client=xxx&token=yyy)
+//         ou admin (sans paramètres)
+//  Le token est stocké dans le JSON du client — aucune
+//  table de correspondance dans ce fichier HTML.
+// ══════════════════════════════════════════════════════════
+const URL_PARAMS = new URLSearchParams(location.search);
+const CLIENT_KEY_FROM_URL = URL_PARAMS.get('client');
+const TOKEN_FROM_URL = URL_PARAMS.get('token');
+const IS_SUBCONTRACTOR = !!CLIENT_KEY_FROM_URL;
+
+let LOADED_CLIENT = null;
 
 const ALL_PRODUCTS = [
   {id:"p01",nom:"Ajax citron",img:"https://actif-service.github.io/commande-materiel/images/Ajax_citron.jpg"},
@@ -299,7 +263,7 @@ const ALL_PRODUCTS = [
   {id:"p05",nom:"Detarsan 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Detarsan_1litre.jpg"},
   {id:"p06",nom:"Dreft 1 litre",img:"https://actif-service.github.io/commande-materiel/images/Dreft_1_litre.jpg"},
   {id:"p07",nom:"WC Gel avec Javel",img:"https://actif-service.github.io/commande-materiel/images/WC_Gel_avec_Javel.jpg"},
-  {id:"p08",nom:"WC Gel",img:"https://actif-service.github.io/commande-materiel/images/WC_Gel.jpg"},  
+  {id:"p08",nom:"WC Gel",img:"https://actif-service.github.io/commande-materiel/images/WC_Gel.jpg"},
   {id:"p09",nom:"Gants de ménage Taille S",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_S.jpg"},
   {id:"p10",nom:"Gants de ménage Taille M",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_M.jpg"},
   {id:"p11",nom:"Gants de ménage Taille L",img:"https://actif-service.github.io/commande-materiel/images/Gants_de_menage_Taille_L.jpg"},
@@ -329,239 +293,34 @@ const ALL_PRODUCTS = [
   {id:"p35",nom:"Savon Main Vent de Rose 5 litres",img:"https://actif-service.github.io/commande-materiel/images/Savon_Main_-_Vent_de_Rose_-_5_litres.jpg"}
 ];
 
-const DEFAULT_CLIENTS = [
-  {key:"Be_Clean",societe:"BE Clean",chantiers:[
-    {nom:"AKROPOLIS",adresse:"Luitberg, 25 — 1853 Strombeek-Bever"},
-    {nom:"APOLLO 95-97",adresse:"Grote Winkellaan, 95-97 — 1853 Strombeek-Bever"},
-    {nom:"ECTA",adresse:"Rue de Trèves, 49-51 — 1040 Etterbeek"},
-    {nom:"EPHA",adresse:"Rue de Trèves, 49-51 — 1040 Etterbeek"},
-    {nom:"ERS",adresse:"Rue de Trèves, 49-51 — 1040 Etterbeek"},
-    {nom:"GROENDAL",adresse:"Sint-Annalaan, 74 — 1800 Vilvoorde"},
-    {nom:"STONE",adresse:"Steenstraat, 59 — 1800 Vilvoorde"},
-    {nom:"BWT",adresse:"Leuvensesteenweg, 633 — 1930 Zaventem"}
-  ]},
-  {key:"Top_Clean",societe:"Top Clean",chantiers:[
-    {nom: "KANTAR INSIGHTS", "adresse": "Boulevard Saint-Lazard,4  1210 Saint-Josse-ten-Noode" },
-    {nom: "METAL PACKAGING", "adresse": "Rue de Trèves,59-61  1040 Etterbeek" },
-    {nom: "URBANTZ", "adresse": "Avenue Louise, 251  1050 Ixelles" },
-    {nom: "ARTS 19 (Eglise de Jésus)", "adresse": "Rue d'Idalie, 11-13  1050 Ixelles" }
-  ]},
-  {key:"Aquilabell",societe:"Aquilabell",chantiers:[
-    {nom: "CALL INTERNATIONAL", "adresse": "Drève de Richelle, 161  1410 Waterloo" },
-    {nom: "CONCEPT CONTROL", "adresse": "Drève de Richelle, 161  1410 Waterloo" },
-    {nom: "ERGON", "adresse": "Drève de Richelle, 161  1410 Waterloo" },
-    {nom: "EUROPLAFOND", "adresse": "Ruisbroeksesteenweg, 235  1601 Sint-Pieters-Leeuw" },
-    {nom: "FIABILIS CONSULTING", "adresse": "Boulevard de l'Humanité, 233/10  1620 Drogenbos" },
-    {nom: "VIVE VERDE", "adresse": "Rue de Laubespin, 82-84-86-104-106  1090 Jette" },
-    {nom: "RING CONSULT (1ère Agence)", "adresse": "James Ensorlaan, 39  1800 Vilvoorde" },
-    {nom: "RING CONSULT (2ème Agence)", "adresse": "Nowelei, 26  1800 Vilvoorde" },
-    {nom: "PETIT ENVOL (Crèche)", "adresse": "Rue au bois, 513  1150 Woluwe Saint-Pierre"}
-  ]},
-  {key:"Bostanari",societe:"Bostanari / Marianna",chantiers:[
-    {nom: "HYDROGEN EUROPE", "adresse": "Avenue Marnix, 23  1000 Bruxelles"}
-  ]},
-  {key:"Bruno_Clean",societe:"Bruno Clean",chantiers:[
-    {nom: "ABRI SUD", "adresse": "Chaussée de Louvain, 46B  1932 Sint Stevens Woluwe" },
-    {nom: "CABINET Dentaire VANHOMWEGEN", "adresse": "Avenue Paul Hymans, 1  1200 Bruxelles" },
-    {nom: "CAMPARI", "adresse": "Rue aux Laines, 70  1000 Bruxelles" },
-    {nom: "Docteur INES de MERODE", "adresse": "Rue Solleveld, 20  1200 Bruxelles" },
-    {nom: "LECOT", "adresse": "Boulevard de la 2d Armée Britannique,67  1190 Forest" },
-    {nom: "LESBROUSSART", "adresse": "Rue Lesbroussart, 80  1000 Bruxelles" },
-    {nom: "CITY GATE I", "adresse": "Kerklaan, 67 B/C  1830 Machelen" },
-    {nom: "CITY GATE II", "adresse": "Kerklaan, 65 B/C/D  1830 Machelen" },
-    {nom: "CITY GATE III", "adresse": "Kerklaan, 63 B/C/D  1830 Machelen" },
-    {nom: "MAETERLINCK", "adresse": "J. Van Elewijckstraat, 88-90  1853 Strombeek-Bever" },
-    {nom: "BOENDAL", "adresse": "Chaussée de Boendal, 190  1050 Ixelles" }
-  ]},
-  {key:"COM_Invest",societe:"COM Invest",chantiers:[
-    {nom: "BEARING POINT (7ème)", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "BNP PARIBAS", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "CANCOM", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "CDH", "adresse": "Rue du Commerce, 123  1000 Bruxelles" },
-    {nom: "CHEMOURS", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "COLONIES BELGIUM", "adresse": "Rue Stevin, 21-23  1000 Bruxelles" },
-    {nom: "EURALIA (4ème)", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "FINTRO EVERE", "adresse": "Avenue du Pentathlon, 3  1140 Evere" },
-    {nom: "I.E.T.A.", "adresse": "Rue du Commerce, 123  1000 Bruxelles" },
-    {nom: "PARTI DEMOCRATE EUROPEEN (1er)", "adresse": "Rue Montoyer,25  1000 Bruxelles" },
-    {nom: "BUNDESARZTEKAMMER (6ème)", "adresse": "Rue Montoyer, 25  1000 Bruxelles" },
-    {nom: "BUNDESSTEUERBERATERKAMMER (5ème)", "adresse": "Rue Montoyer, 25  1000 Bruxelles" },
-    {nom: "CORTEVA (8ème)", "adresse": "Rue Montoyer, 25  1000 Bruxelles" },
-    {nom: "DIRK MARTENS", "adresse": "Houba De Strooperlaan, 790  1020 Laeken" },
-    {nom: "EFBS-PFANDBRIEF (4ème)", "adresse": "Rue Montoyer, 25  1000 Bruxelles" },
-    {nom: "UNIPER (3ème)", "adresse": "Rue Montoyer, 25  1000 Bruxelles" }
-  ]},
-  {key:"Clean_ARO",societe:"Clean ARO",chantiers:[
-    {nom: "WHITE ATRIUM", "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles" },
-    {nom: "STASSART 131", "adresse": "Rue de Stassart, 131  1050 Ixelles" },
-    {nom: "STASSART 124", "adresse": "Rue de Stassart, 124  1050 Ixelles" },
-    {nom: "STASSART 122", "adresse": "Rue de Stassart, 122  1050 Ixelles" },
-    {nom: "STEPHANIE 16", "adresse": "Place Stephanie, 16  1050 Ixelles" },
-    {nom: "STEPHANIE 14", "adresse": "Place Stephanie, 14  1050 Ixelles" },
-    {nom: "BLACKFIN", "adresse": "Avenue Louise, 106  1050 Ixelles" },
-    {nom: "SAS SPB", "adresse": "Avenue Louise, 120  1050 Ixelles" },
-    {nom: "DELICES ARCHITECTES", "adresse": "Rue de Stassart, 124  1050 Ixelles" },
-    {nom: "TRANSPERFECT TRADUCTIONS", "adresse": "Avenue Louise, 120 (8ème)  1050 Ixelles" },
-    {nom: "LIBERATION EUROPE", "adresse": "Rue de Stassart, 131  1050 Ixelles" },
-    {nom: "6GSNS JU  1er étage", "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles" },
-    {nom: "GLOBAL HEATH (2ème étage)", "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles" },
-    {nom: "ACP TOISON D'OR", "adresse": "Avenue de la Toison d'Or, 56  1060 Saint-Gilles" },
-    {nom: "WESHARE AGENCY", "adresse": "Rue des Carmélites, 167 A  1180 Uccle" },
-    {nom: "FIRST LAW", "adresse": "Avenue Louise, 480  1050 Ixelles" }
-  ]},
-  {key:"Efata_Clean",societe:"Efata Clean",chantiers:[
-    {nom: "ARTS BASICS For CHILDREN", "adresse": "Place Gaucheret, 13  1030 Schaerbeek" },
-    {nom: "LENS & ABELOOS", "adresse": "Grote Markt, 21  1800 Vilvoorde" },
-    {nom: "LEE (Les Entreprises Esmer)", "adresse": "Rue des Anciens Etangs, 48  1190 Forest" },
-    {nom: "MERCATOR", "adresse": "Hendrik I Lei, 190  1800 Vilvoorde" },
-    {nom: "TRANS SERVICE EXPRESS", "adresse": "Cyriel Buyssestraat, 126  1800 Vilvoorde" }
-  ]},
-  {key:"Garcia",societe:"Entreprise Garcia",chantiers:[
-    {nom: "ASTRONOMIE", "adresse": "Avenue de l'Astronomie, 9  1210 Saint-Josse-ten-Noode" },
-    {nom: "LITS SERENI", "adresse": "Avenue Georges Henri, 303  1200 Woluwe-Saint-Lambert" },
-    {nom: "PIERRE FORRIER", "adresse": "Rue des Béguines, 18 & 104  1080 Molenbeek" },
-    {nom: "SERENI Van Horenbeek", "adresse": "Avenue Jean Van Horenbeek, 17  1160 Auderghem" }
-  ]},
-  {key:"Fa_Clean",societe:"FA Clean",chantiers:[
-    {nom: "ACP LOUISE 140", "adresse": "Avenue Louise, 140  1050 Ixelles" },
-    {nom: "ACP TOISON D'OR 76", "adresse": "Avenue de la Toison d'Or, 76  1060 Saint-Gilles" },
-    {nom: "HENRI JASPAR AIMRE", "adresse": "Avenue Henri Jaspar, 110  1060 Saint-Gilles" },
-    {nom: "ARAMIS", "adresse": "Nowelei, 41  1800 Vilvoorde" },
-    {nom: "BEODIE", "adresse": "Avenue Orban, 213  1150 Woluwe-Saint-Pierre" },
-    {nom: "COLONIES ANTWERPEN", "adresse": "Appelmansstraat, 30  2018 Antwerpen" },
-    {nom: "COMPTA DIRECT", "adresse": "Sint-Amandastraat, 83  1853 Strombeek-Bever" },
-    {nom: "COMPTAMAX", "adresse": "Rue du Caporal Claes, 8  1030 Schaerbeek" },
-    {nom: "DFNET", "adresse": "Rue Gustave Defnet, 18  1060 Saint-Gilles" },
-    {nom: "FINPARCO (AXIS)", "adresse": "Rue de Luxembourg, 19  1000 Bruxelles" },
-    {nom: "TPS TECH", "adresse": "Chaussée de Vilvoorde, 104  1120 Neder-Over-Hembeek" },
-    {nom: "VERIAN (KANTAR PUBLIC)", "adresse": "Avenue des Arts, 58  1000 Bruxelles" },
-    {nom: "BEAUVAL ABBEY)", "adresse": "Streekbaan, 196  1800 Vilvoorde" },
-    {nom: "PASSEREL", "adresse": "Sint-Amandastraat, 83  1853 Strombeek-Bever" },
-    {nom: "VORTAN (Marteau)", "adresse": "Rue du Marteau, 60  1000 Bruxelles" }
-  ]},
-  {key:"Fan_Construct",societe:"Fan Construct / Serge",chantiers:[
-    {nom: "ACP VIERGES", "adresse": "Rue des Vierges, 58  1000 Bruxelles" },
-    {nom: "ANTONY TRANSPORT", "adresse": "Trawoolaan, 1A  1830 Machelen" },
-    {nom: "ARTS 53", "adresse": "Avenue des Arts, 53  1000 Bruxelles" },
-    {nom: "BIODYNAMIC FEDERATION", "adresse": "Rue du Trône, 194  1050 Ixelles" },
-    {nom: "CEPE (4ème)", "adresse": "Boulevard du Triomphe, 172  1160 Auderghem" },
-    {nom: "COLLIBRA", "adresse": "Rue Picard, 11 (Gare Maritime)  1000 Bruxelles" },
-    {nom: "ECSWE", "adresse": "Rue du Trône, 194  1050 Ixelles" },
-    {nom: "ENEA (4ème)", "adresse": "Rue de Namur, 72-74  1000 Bruxelles" },
-    {nom: "FINTRO (Berlaimont)", "adresse": "Boulevard de l'Impératrice, 56  1000 Bruxelles" },
-    {nom: "FISC PROTECT", "adresse": "Rue Alfred Dubois,25  1080 Molenbeek" },
-    {nom: "HORTICULTEURS", "adresse": "Rue des Horticulteurs, 24  1020 Laeken" },
-    {nom: "JB ELECTEUR", "adresse": "Rue Leopold 1er, 487  1090 Jette" },
-    {nom: "LEMONNIER", "adresse": "Boulevard Lemonnier, 94-96  1000 Bruxelles" },
-    {nom: "LEUVENSESTEENWEG 555", "adresse": "Leuvensesteenweg, 555  1930 Zaventem" },
-    {nom: "MENCH INDUSTRY", "adresse": "Trawoolaan, 1A  1830 Machelen" },
-    {nom: "VB-CARS", "adresse": "Trawoolaan, 3-6  1830 Machelen" },
-    {nom: "PLAN B PORTA", "adresse": "Leuvensesteenweg, 117 & 36  1800 Vilvoorde" },
-    {nom: "PROTEA", "adresse": "Jan Mulsstraat, 130-132-134  1853 Grimbergen" }
-  ]},
-  {key:"Flexy_Net",societe:"Flexy Net",chantiers:[
-    {nom: "BOEKHOUD EXPERT", "adresse": "Haachtsesteenweg, 377 B9  1910 Kampenhout" },
-    {nom: "CORE FM", "adresse": "Haachtsesteenweg, 377 B9  1910 Kampenhout" },
-    {nom: "JOFFRE", "adresse": "Avenue Maréchal Joffre, 84  1190 Forest" },
-    {nom: "MONEDOIR PARK", "adresse": "Sinta Katharinastraat, 14-16-18  3070 Kortenberg" },
-    {nom: "PIEREMAN A", "adresse": "Begonialaan, 32-34  1853 Strombeek-Bever" },
-    {nom: "SIRIUS", "adresse": "Singel, 20  1853 Strombeek-Bever" },
-    {nom: "VAN RUISBEEK", "adresse": "Haachtsesteenweg, 377  1910 Kampenhout" }
-  ]},
-  {key:"Ghita_Marius",societe:"Ghita Marius",chantiers:[
-    {nom: "ACP BRUSSELSESTEENWEG, 129", "adresse": "Brusselsesteenweg, 129  1730 Asse" },
-    {nom: "ACP BRUSSELSESTEENWEG, 326", "adresse": "Brusselsesteenweg, 326  1730 Asse" },
-    {nom: "ACP HORTA", "adresse": "avenue Carl Requête, 27  1080 Molenbeek" },
-    {nom: "ACP PARC", "adresse": "Rue de Scheutbosch, 105  1080 Molenbeek" },
-    {nom: "BEGONIA", "adresse": "Begonialaan, 11  1853 Strombeek-Bever" },
-    {nom: "LEMAN", "adresse": "Schoolstraat, 4  1780 Wemmel" },
-    {nom: "MIRAFLORES", "adresse": "Grotewinkellaan, 166  1853 Strombeek-Bever" },
-    {nom: "MOLINEAU (ATLANTICO)", "adresse": "J. De Vleminckstraat, 24 E  1853 Strombeek-Bever" },
-    {nom: "VME AURA", "adresse": "Markt, 2-4  1785 Merchtem" },
-    {nom: "VME DE MEANDER", "adresse": "Nieuwstraat, 16  1785 Merchtem" },
-    {nom: "VME EDELWEISS", "adresse": "Josef Van Elewijckstraat, 113  1853 Strombeek-Bever" }
-  ]},
-  {key:"GK_Solutions",societe:"GK Solutions",chantiers:[
-    {nom: "ACP ADELBODEN", "adresse": "Bergdal, 9  1853 Strombeek-Bever" },
-    {nom: "HEUVELDAL", "adresse": "Heuveldal, 36-38  1853 Strombeek" },    
-    {nom: "JECA INVEST", "adresse": "Limbosweg, 15  1860 Meise" },
-    {nom: "LUGANO", "adresse": "Bergdal, 5  1853 Strombeek-Bever" },
-    {nom: "ALICANTE", "adresse": "Ruisbroeksesteenweg, 235  1601 Sint-Pieters-Leeuw" },
-    {nom: "VME EMILE VERHAEREN", "adresse": "Josef Van Elewijkstraat, 105  1853 Strombeek-Bever" }
-  ]},
-  {key:"Group_Guima",societe:"Group Guima",chantiers:[
-    {nom: "ACP BASSE", "adresse": "Rue Basse, 84-86  1180 Uccle" },
-    {nom: "ACP LE BOURGOGNE", "adresse": "Kasteelstraat, 21  1853 Strombeek-Bever" },
-    {nom: "ACP RODEPOORT", "adresse": "Rodepoortstraat, 55  1853 Strombeek-Bever" },
-    {nom: "AMBIANCE CUISINE", "adresse": "Chaussée de Waterloo, 1138  1180 Uccle" },
-    {nom: "AP & FICOGES", "adresse": "Boulevard Sylvain Dupuis, 213  1070 Anderlecht" },
-    {nom: "CALLE ALTA", "adresse": "Rue Haute, 195  1000 Bruxelles" },
-    {nom: "CM ARCHITECTES", "adresse": "Rue Haute, 195 (1er étage)  1000 Bruxelles" },
-    {nom: "DE HERTOGH", "adresse": "Rue de Hembeek, 280  1120 Neder-Over-Hembeek" },
-    {nom: "ECORYS", "adresse": "Avenue des Arts, 46  1000 Bruxelles" },
-    {nom: "FORGES MICHEL Avocat", "adresse": "Drève des Renards 4/29  1180 Uccle" },
-    {nom: "NICKEL", "adresse": "Rue Royale, 144  1000 Bruxelles" },
-    {nom: "VME DE BORGHT", "adresse": "Rodepoortstraat, 46  1853 Strombeek-Bever" },
-    {nom: "VME DE BURTIN", "adresse": "De Burtinstraat, 28  1853 Strombeek-Bever" },
-    {nom: "VME KANDINSKY", "adresse": "Frans Robberechtsstraat, 10  1780 Wemmel" },
-    {nom: "VME MUTSAERT I", "adresse": "Kasteelstraat, 31  1853 Strombeek-Bever" },  
-    {nom: "VME PHILIPPE LE BON", "adresse": "Kasteelstraat, 33  1853 Strombeek-Bever" },  
-    {nom: "VORTAN - Rue du NID", "adresse": "Rue du Nid, 15  1050 Ixelles" }
-  ]},
-  {key:"Groupe_SET",societe:"Groupe SET / Laura",chantiers:[
-    {nom: "CABINET MEDICAL WATERLOO", "adresse": "Avenue Schattens, 29  (-1)  1410 Waterloo" },
-    {nom: "CENTRE DE RADIOLOGIE", "adresse": "Avenue Schattens, 29  (Rez)  1410 Waterloo" },
-    {nom: "COIFFURE BENJAMIN LACAILLE", "adresse": "Chaussée de Bruxelles, 632  1410 Waterloo" },
-    {nom: "COMAP", "adresse": "Alsembergsesteenweg, 454  1653 Dworp" },
-    {nom: "MONDE SELECTION", "adresse": "Chaussée de Tubize, 242  1440 Wauthier Braine" }
-  ]},
-  {key:"OANA",societe:"Neghina Nicusor / OANA",chantiers:[
-    {nom: "VME ASTRID", "adresse": "Koningin Astridlaan, 59A & 59B  1780 Wemmel" }
-  ]},
-  {key:"Rose_Group",societe:"Rose Group Invest",chantiers:[
-    {nom: "ECOLE SAINT JOSEPH", "adresse": "Chaussée de Waterloo, 1190  1180 Uccle" }
-  ]},
-  {key:"Viana_Cleaning",societe:"Viana Clean Services",chantiers:[
-    {nom: "CALL INTERNATIONAL", "adresse": "Avenue Louise,251 (5ème)  1050 Ixelles" },
-    {nom: "FULLMARK", "adresse": "Avenue Thomas Edison, 121  1400 Nivelles" },
-    {nom: "GANG BELGIUM", "adresse": "Avenue Louise, 120  1050 Ixelles" },
-    {nom: "IMMOBILERE DE LA GRANDE PLACE", "adresse": "Rue du Lombard, 39  1000 Bruxelles" },
-    {nom: "LIONEL DUMONT", "adresse": "Rue Middelbourg,34  1170 Watermael-Boisfort" },
-    {nom: "MARKEN LTD", "adresse": "Leuvensesteenweg, 555  1930 Zaventem" },
-    {nom: "SCALE DOGS", "adresse": "Clos des Ormes, 21  1970 Wezembeek" },
-    {nom: "SOYER & MAMET", "adresse": "Avenue de la Foresterie, 2  1170 Watermael-Boisfort" },
-    {nom: "VORTAN-SOUVERAINE", "adresse": "Rue Souveraine, 97  1050 Ixelles" }
-  ]},
-  {key:"Angonet",societe:"Angonet",chantiers:[
-    {nom: "BANANAS", "adresse": "Schaarbeeklei, 651  1800 Vilvoorde" },
-    {nom: "EDEN SMILE", "adresse": "Avenue Louise 120 (5ème étage droite)  1050 Ixelles" },
-    {nom: "ELO", "adresse": "Rue de Trèves, 68  1040 Etterbeek" },
-    {nom: "KVS", "adresse": "Emmanuellaan, 9  1830 Machelen" }
-  ]},
-  {key:"LS_Services",societe:"L & S Services",chantiers:[
-    {nom: "BOBEX", "adresse": "Quai des Charbonnages, 62  1080 Molenbeek-Saint-Jean" },
-    {nom: "CONIX", "adresse": "Van Meyelstraat, 30  1080 Molenbeek-Saint-Jean" },
-    {nom: "EUROPABIO", "adresse": "Avenue des Arts, 53  1000 Bruxelles" }
-  ]}
-];
+// ══════════════════════════════════════════════════════════
+//  CHARGEMENT DYNAMIQUE DU CLIENT DEPUIS SON FICHIER JSON
+//  → seules les données du client concerné sont téléchargées
+// ══════════════════════════════════════════════════════════
+async function loadClient(key) {
+  try {
+    const resp = await fetch(`clients/${key}.json`);
+    if (!resp.ok) return null;
+    return await resp.json();
+  } catch(e) {
+    return null;
+  }
+}
+
+// Pour l'admin : charge la liste complète des clients (tous les JSON)
+async function loadAllClients() {
+  const results = await Promise.all(
+    CFG.clientKeys.map(k => loadClient(k))
+  );
+  return results.filter(Boolean);
+}
 
 const LS={
   get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},
   set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},
   del:(k)=>{localStorage.removeItem(k);}
 };
-  const DATA_VERSION = "2";
-  
-function getClients(){
-  const savedVersion = localStorage.getItem('as_clients_version');
-  if(savedVersion !== DATA_VERSION){
-    localStorage.setItem('as_clients_version', DATA_VERSION);
-    saveClients(DEFAULT_CLIENTS);
-    return DEFAULT_CLIENTS;
-  }
-  return LS.get('as_clients',DEFAULT_CLIENTS);
-}
-function saveClients(c){LS.set('as_clients',c);}
+
 function getCommandes(){return LS.get('as_commandes',[]);}
 function saveCommandes(c){LS.set('as_commandes',c);}
 function getChantierProds(ck,cn){return LS.get('acp_'+ck+'_'+encodeURIComponent(cn),null);}
@@ -583,60 +342,90 @@ function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(){document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
+function buildNav(){
+  const pill=document.getElementById('nav-pill');
+  if(IS_SUBCONTRACTOR){
+    pill.innerHTML=`<button class="ntab on" id="tab-order" onclick="goTab('order')">Commande</button>`;
+  } else {
+    pill.innerHTML=`
+      <button class="ntab on" id="tab-order" onclick="goTab('order')">Commande</button>
+      <button class="ntab" id="tab-suivi" onclick="goTab('suivi')">
+        Livraisons <span class="nav-badge" id="badge-suivi"></span>
+      </button>
+      <button class="ntab" id="tab-admin" onclick="goTabAdmin()">Admin</button>`;
+  }
+}
+
 const TABS=['order','suivi','admin'];
 let currentTab='order';
+
 function goTab(t){
+  if(IS_SUBCONTRACTOR && (t==='suivi'||t==='admin')) return;
   currentTab=t;
   TABS.forEach(id=>{
     document.getElementById('pg-'+id).classList.toggle('on',id===t);
-    document.getElementById('tab-'+id).classList.toggle('on',id===t);
+    const el=document.getElementById('tab-'+id);
+    if(el) el.classList.toggle('on',id===t);
   });
   document.getElementById('cart-bar').classList.remove('show');
-  if(t==='order')renderOrder();
-  if(t==='suivi')renderSuivi();
-  if(t==='admin')renderAdmin();
+  if(t==='order') renderOrder();
+  if(t==='suivi') renderSuivi();
+  if(t==='admin') renderAdmin();
 }
+
 function goTabAdmin(){
+  if(IS_SUBCONTRACTOR) return;
   if(isAdminUnlocked()){goTab('admin');return;}
   document.getElementById('admin-pw').value='';
   openModal('modal-login');
 }
+
 function checkAdminPw(){
-  const pw=document.getElementById('admin-pw').value;
-  if(pw===CFG.adminPw){unlockAdmin();closeModal();goTab('admin');}
-  else{showToast('Mot de passe incorrect',true);}
+  if(document.getElementById('admin-pw').value===CFG.adminPw){
+    unlockAdmin();closeModal();goTab('admin');
+  } else {
+    showToast('Mot de passe incorrect',true);
+  }
 }
+
 function updateSuiviBadge(){
-  const n=getCommandes().filter(c=>c.statut!=='livree').length;
+  if(IS_SUBCONTRACTOR) return;
   const b=document.getElementById('badge-suivi');
+  if(!b) return;
+  const n=getCommandes().filter(c=>c.statut!=='livree').length;
   b.textContent=n;b.classList.toggle('show',n>0);
 }
 
 let ORDER={client:null,chantier:null,demandeur:'',produits:{}};
 
-function renderOrder(){
-  const params=new URLSearchParams(location.search);
-  const ck=params.get('client');
-  const clients=getClients();
-  const client=ck?clients.find(c=>c.key===ck):null;
+async function renderOrder(){
   const el=document.getElementById('pg-order');
   document.getElementById('main-nav').style.display='';
 
-  if(!client&&!ck){
-    clients.sort((a,b)=>a.societe.localeCompare(b.societe,'fr'));
-    el.innerHTML=`
-      <div class="empty">
-        <div class="empty-icon">🔒</div>
-        <div class="empty-title">Accès refusé</div>
-        <div class="empty-sub">Vous n'avez pas de lien valide.<br>Contactez votre responsable Actif Service.</div>
-      </div>`;
-    return;
-  }
-  if(!client){
-    el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Contactez votre responsable Actif Service.</div></div>`;
+  if(!IS_SUBCONTRACTOR){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🔒</div><div class="empty-title">Accès refusé</div><div class="empty-sub">Vous n'avez pas de lien valide.<br>Contactez votre responsable Actif Service.</div></div>`;
     return;
   }
 
+  // client ou token absent → accès refusé immédiat
+  if(!CLIENT_KEY_FROM_URL || !TOKEN_FROM_URL){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Ce lien n'est pas reconnu.<br>Contactez votre responsable Actif Service.</div></div>`;
+    return;
+  }
+
+  // Afficher un spinner pendant le chargement
+  el.innerHTML=`<div class="loading"><div class="spinner"></div>Chargement en cours…</div>`;
+
+  // Charger le JSON du client (contient le token attendu)
+  const client = await loadClient(CLIENT_KEY_FROM_URL);
+
+  // JSON introuvable OU token incorrect → accès refusé
+  if(!client || client.token !== TOKEN_FROM_URL){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Ce lien n'est pas reconnu.<br>Contactez votre responsable Actif Service.</div></div>`;
+    return;
+  }
+
+  LOADED_CLIENT = client;
   ORDER.client=client;ORDER.produits={};ORDER.demandeur='';
 
   el.innerHTML=`
@@ -698,11 +487,10 @@ function onChantierChange(){
   updateCartBar();
 }
 
-// ✅ FIX : conteneur image à hauteur fixe, image en position absolute, fade-in au chargement
 function renderProdGrid(list){
   document.getElementById('ord-grid').innerHTML=list.map(p=>{
     const e=encodeURIComponent(p.nom);
-    return `<div class="prod-card" id="pc_${e}">
+    return`<div class="prod-card" id="pc_${e}">
       <div class="prod-img-wrap">
         <img class="prod-img" src="${esc(p.img)}" alt="${esc(p.nom)}"
           onload="this.classList.add('loaded')"
@@ -810,8 +598,6 @@ function doSendCmd(){
       saveCommandes(cmds);
       updateSuiviBadge();
       showToast('✓ Commande envoyée !');
-
-      // ✅ FIX : réinitialisation SANS reconstruire la grille (pas de saut visuel)
       resetQtys();
       const nomEl=document.getElementById('ord-nom');
       const autreEl=document.getElementById('ord-autre');
@@ -861,7 +647,11 @@ ${autre?`<p style="margin-top:16px;background:#FEF3E2;padding:12px;border-radius
 </div>`;
 }
 
+// ══════════════════════════════════════════════════════════
+//  SUIVI
+// ══════════════════════════════════════════════════════════
 let SF='all',SUIVI_SEARCH='';
+
 function renderSuivi(){
   const cmds=getCommandes(),el=document.getElementById('pg-suivi');
   const att=cmds.filter(c=>c.statut==='attente').length;
@@ -896,6 +686,7 @@ function renderSuivi(){
       :filt.map(c=>buildCmdRow(c)).join('')}`;
   updateSuiviBadge();
 }
+
 function buildCmdRow(c){
   const nl=c.lignes.length,ll=c.lignes.filter(l=>l.livre).length;
   let cls='',pill='';
@@ -964,12 +755,24 @@ function delCmd(id){if(!confirm('Supprimer cette commande ?'))return;saveCommand
 function clearLiv(){if(!confirm('Supprimer toutes les commandes livrées ?'))return;saveCommandes(getCommandes().filter(c=>c.statut!=='livree'));renderSuivi();}
 function setSF(f){SF=f;renderSuivi();}
 
-let ADM={client:null,chantier:null,tab:'clients',selProds:new Set()};
-function renderAdmin(){
+// ══════════════════════════════════════════════════════════
+//  ADMIN — charge tous les clients dynamiquement
+// ══════════════════════════════════════════════════════════
+let ADM={clients:[],client:null,chantier:null,tab:'clients',selProds:new Set(),loaded:false};
+
+async function renderAdmin(){
   const el=document.getElementById('pg-admin');
   if(ADM.client&&ADM.chantier){renderAdminChantier();return;}
   if(ADM.client){renderAdminClient();return;}
-  const clients=getClients();
+
+  // Charger tous les clients si pas encore fait
+  if(!ADM.loaded){
+    el.innerHTML=`<div class="loading"><div class="spinner"></div>Chargement des clients…</div>`;
+    ADM.clients = await loadAllClients();
+    ADM.loaded = true;
+  }
+
+  const clients=[...ADM.clients].sort((a,b)=>a.societe.localeCompare(b.societe,'fr'));
   el.innerHTML=`
     <div class="pg-title">Administration</div>
     <div class="pg-sub">Gérez les clients, chantiers et produits autorisés</div>
@@ -982,16 +785,15 @@ function renderAdmin(){
     ${ADM.tab==='produits'?renderAdminProduits():''}
     ${ADM.tab==='config'?renderAdminConfig():''}`;
 }
+
 function renderAdminClients(clients){
-  clients = [...clients].sort((a,b) => a.societe.localeCompare(b.societe,'fr'));
   return`
     <div class="toolbar">
       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">${clients.length} clients</div>
       <div class="spacer"></div>
-      <button class="btn btn-primary btn-sm" onclick="showAddClient()">+ Nouveau client</button>
     </div>
     <div class="alert alert-info">📧 Commandes envoyées à : <strong>${CFG.destinataires.join('</strong> et <strong>')}</strong></div>
-    <div id="add-client-form"></div>
+    <div class="alert alert-warn">⚠️ Pour ajouter ou modifier un client, éditez le fichier JSON correspondant dans le dossier <code>clients/</code>.</div>
     <div class="client-list">
       ${clients.map(c=>{
         const cfg=c.chantiers.filter(ch=>getChantierProds(c.key,ch.nom)!==null).length;
@@ -1003,37 +805,16 @@ function renderAdminClients(clients){
       }).join('')}
     </div>`;
 }
-function showAddClient(){
-  document.getElementById('add-client-form').innerHTML=`
-    <div class="inline-form">
-      <div class="frow" style="margin-bottom:10px;">
-        <div class="fgroup"><label class="flabel">Nom de la société</label><input type="text" id="nc-societe" placeholder="Ex: ACME Clean"></div>
-        <div class="fgroup"><label class="flabel">Clé unique (sans espaces)</label><input type="text" id="nc-key" placeholder="Ex: ACME_Clean"></div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary btn-sm" onclick="doAddClient()">Créer</button>
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('add-client-form').innerHTML=''">Annuler</button>
-      </div>
-    </div>`;
-}
-function doAddClient(){
-  const societe=document.getElementById('nc-societe').value.trim();
-  const key=document.getElementById('nc-key').value.trim().replace(/\s+/g,'_');
-  if(!societe||!key){showToast('Remplissez tous les champs',true);return;}
-  const clients=getClients();
-  if(clients.find(c=>c.key===key)){showToast('Cette clé existe déjà',true);return;}
-  clients.push({key,societe,chantiers:[{nom:'Chantier 1',adresse:''}]});
-  saveClients(clients);showToast('✓ Client créé');renderAdmin();
-}
+
 function renderAdminClient(){
-  const clients=getClients(),c=clients.find(x=>x.key===ADM.client);
+  const c=ADM.clients.find(x=>x.key===ADM.client);
   if(!c){ADM.client=null;renderAdmin();return;}
   const el=document.getElementById('pg-admin');
   const link=location.origin+location.pathname+'?client='+c.key;
   el.innerHTML=`
     <div class="bc"><a onclick="ADM.client=null;ADM.chantier=null;renderAdmin()">Admin</a><span class="bc-sep">›</span>${esc(c.societe)}</div>
     <div class="pg-title">${esc(c.societe)}</div>
-    <div class="pg-sub">Gérez les chantiers et les produits autorisés</div>
+    <div class="pg-sub">Configurez les produits autorisés par chantier</div>
     <div class="card">
       <div class="card-title">Lien de commande client</div>
       <div class="link-box">
@@ -1043,11 +824,7 @@ function renderAdminClient(){
     </div>
     <div class="toolbar">
       <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Chantiers</div>
-      <div class="spacer"></div>
-      <button class="btn btn-primary btn-sm" onclick="showAddChantier('${c.key}')">+ Chantier</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteClient('${c.key}')">Supprimer client</button>
     </div>
-    <div id="add-chantier-form"></div>
     <div class="chantier-grid">
       ${c.chantiers.map(ch=>{
         const pr=getChantierProds(c.key,ch.nom),cnt=pr?pr.length:ALL_PRODUCTS.length;
@@ -1060,33 +837,9 @@ function renderAdminClient(){
       }).join('')}
     </div>`;
 }
-function showAddChantier(ck){
-  document.getElementById('add-chantier-form').innerHTML=`
-    <div class="inline-form">
-      <div class="frow" style="margin-bottom:10px;">
-        <div class="fgroup"><label class="flabel">Nom du chantier</label><input type="text" id="nch-nom" placeholder="Ex: AKROPOLIS"></div>
-        <div class="fgroup"><label class="flabel">Adresse (optionnel)</label><input type="text" id="nch-addr" placeholder="Ex: Rue X, 1000 Bruxelles"></div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary btn-sm" onclick="doAddChantier('${ck}')">Ajouter</button>
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('add-chantier-form').innerHTML=''">Annuler</button>
-      </div>
-    </div>`;
-}
-function doAddChantier(ck){
-  const nom=document.getElementById('nch-nom').value.trim();
-  const adresse=document.getElementById('nch-addr').value.trim();
-  if(!nom){showToast('Nom requis',true);return;}
-  const clients=getClients(),c=clients.find(x=>x.key===ck);if(!c)return;
-  c.chantiers.push({nom,adresse});saveClients(clients);showToast('✓ Chantier ajouté');renderAdmin();
-}
-function deleteClient(ck){
-  if(!confirm('Supprimer ce client et tous ses chantiers ?'))return;
-  saveClients(getClients().filter(c=>c.key!==ck));
-  ADM.client=null;ADM.chantier=null;showToast('Client supprimé');renderAdmin();
-}
+
 function renderAdminChantier(){
-  const clients=getClients(),c=clients.find(x=>x.key===ADM.client);
+  const c=ADM.clients.find(x=>x.key===ADM.client);
   const chNom=decodeURIComponent(ADM.chantier);
   const chD=c?c.chantiers.find(x=>x.nom===chNom):null;
   if(!c||!chD){ADM.chantier=null;renderAdmin();return;}
@@ -1127,6 +880,7 @@ function renderAdminChantier(){
       ${cur!==null?`<button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="resetProdsConfig()">Réinitialiser (tous)</button>`:''}
     </div>`;
 }
+
 function filterProdAdmin(q){
   const q2=q.toLowerCase();
   document.querySelectorAll('.pci').forEach(el=>{
@@ -1181,15 +935,10 @@ function renderAdminConfig(){
         <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Exporter les données</button>
         <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑 Tout effacer</button>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Réinitialiser clients</div>
-      <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">Restaurer la liste des clients d'origine.</p>
-      <button class="btn btn-ghost btn-sm" onclick="resetClients()">↩ Réinitialiser la liste clients</button>
     </div>`;
 }
 function exportData(){
-  const data={commandes:getCommandes(),clients:getClients(),exportDate:new Date().toISOString()};
+  const data={commandes:getCommandes(),clients:ADM.clients,exportDate:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='actif-service-data-'+new Date().toISOString().slice(0,10)+'.json';a.click();
@@ -1197,15 +946,14 @@ function exportData(){
 }
 function clearAllData(){
   if(!confirm('Effacer toutes les commandes et configurations ? Cette action est irréversible.'))return;
-  localStorage.clear();showToast('Données effacées');renderAdmin();
-}
-function resetClients(){
-  if(!confirm("Restaurer la liste d'origine ?"))return;
-  saveClients(DEFAULT_CLIENTS);showToast('✓ Clients réinitialisés');
-  ADM.client=null;ADM.chantier=null;renderAdmin();
+  localStorage.clear();showToast('Données effacées');ADM.loaded=false;renderAdmin();
 }
 
+// ══════════════════════════════════════════════════════════
+//  INITIALISATION
+// ══════════════════════════════════════════════════════════
 document.getElementById('main-nav').style.display='flex';
+buildNav();
 updateSuiviBadge();
 goTab('order');
 </script>

@@ -1,0 +1,23 @@
+{
+  "key": "Angonet",
+  "token": "65UUWX",
+  "societe": "Angonet",
+  "chantiers": [
+    {
+      "nom": "BANANAS",
+      "adresse": "Schaarbeeklei, 651  1800 Vilvoorde"
+    },
+    {
+      "nom": "EDEN SMILE",
+      "adresse": "Avenue Louise 120 (5ème étage droite)  1050 Ixelles"
+    },
+    {
+      "nom": "ELO",
+      "adresse": "Rue de Trèves, 68  1040 Etterbeek"
+    },
+    {
+      "nom": "KVS",
+      "adresse": "Emmanuellaan, 9  1830 Machelen"
+    }
+  ]
+}

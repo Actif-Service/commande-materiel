@@ -1,0 +1,39 @@
+{
+  "key": "Be_Clean",
+  "token": "kRVrvA",
+  "societe": "BE Clean",
+  "chantiers": [
+    {
+      "nom": "AKROPOLIS",
+      "adresse": "Luitberg, 25  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "APOLLO 95-97",
+      "adresse": "Grote Winkellaan, 95-97  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "ECTA",
+      "adresse": "Rue de Trèves, 49-51  1040 Etterbeek"
+    },
+    {
+      "nom": "EPHA",
+      "adresse": "Rue de Trèves, 49-51  1040 Etterbeek"
+    },
+    {
+      "nom": "ERS",
+      "adresse": "Rue de Trèves, 49-51  1040 Etterbeek"
+    },
+    {
+      "nom": "GROENDAL",
+      "adresse": "Sint-Annalaan, 74  1800 Vilvoorde"
+    },
+    {
+      "nom": "STONE",
+      "adresse": "Steenstraat, 59  1800 Vilvoorde"
+    },
+    {
+      "nom": "BWT",
+      "adresse": "Leuvensesteenweg, 633  1930 Zaventem"
+    }
+  ]
+}

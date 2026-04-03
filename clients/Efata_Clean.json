@@ -1,0 +1,27 @@
+{
+  "key": "Efata_Clean",
+  "token": "2JUmv4",
+  "societe": "Efata Clean",
+  "chantiers": [
+    {
+      "nom": "ARTS BASICS For CHILDREN",
+      "adresse": "Place Gaucheret, 13  1030 Schaerbeek"
+    },
+    {
+      "nom": "LENS & ABELOOS",
+      "adresse": "Grote Markt, 21  1800 Vilvoorde"
+    },
+    {
+      "nom": "LEE (Les Entreprises Esmer)",
+      "adresse": "Rue des Anciens Etangs, 48  1190 Forest"
+    },
+    {
+      "nom": "MERCATOR",
+      "adresse": "Hendrik I Lei, 190  1800 Vilvoorde"
+    },
+    {
+      "nom": "TRANS SERVICE EXPRESS",
+      "adresse": "Cyriel Buyssestraat, 126  1800 Vilvoorde"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "key": "Fa_Clean",
+  "token": "NvqIuc",
+  "societe": "FA Clean",
+  "chantiers": [
+    {
+      "nom": "ACP LOUISE 140",
+      "adresse": "Avenue Louise, 140  1050 Ixelles"
+    },
+    {
+      "nom": "ACP TOISON D'OR 76",
+      "adresse": "Avenue de la Toison d'Or, 76  1060 Saint-Gilles"
+    },
+    {
+      "nom": "HENRI JASPAR AIMRE",
+      "adresse": "Avenue Henri Jaspar, 110  1060 Saint-Gilles"
+    },
+    {
+      "nom": "ARAMIS",
+      "adresse": "Nowelei, 41  1800 Vilvoorde"
+    },
+    {
+      "nom": "BEODIE",
+      "adresse": "Avenue Orban, 213  1150 Woluwe-Saint-Pierre"
+    },
+    {
+      "nom": "COLONIES ANTWERPEN",
+      "adresse": "Appelmansstraat, 30  2018 Antwerpen"
+    },
+    {
+      "nom": "COMPTA DIRECT",
+      "adresse": "Sint-Amandastraat, 83  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "COMPTAMAX",
+      "adresse": "Rue du Caporal Claes, 8  1030 Schaerbeek"
+    },
+    {
+      "nom": "DFNET",
+      "adresse": "Rue Gustave Defnet, 18  1060 Saint-Gilles"
+    },
+    {
+      "nom": "FINPARCO (AXIS)",
+      "adresse": "Rue de Luxembourg, 19  1000 Bruxelles"
+    },
+    {
+      "nom": "TPS TECH",
+      "adresse": "Chaussée de Vilvoorde, 104  1120 Neder-Over-Hembeek"
+    },
+    {
+      "nom": "VERIAN (KANTAR PUBLIC)",
+      "adresse": "Avenue des Arts, 58  1000 Bruxelles"
+    },
+    {
+      "nom": "BEAUVAL ABBEY",
+      "adresse": "Streekbaan, 196  1800 Vilvoorde"
+    },
+    {
+      "nom": "PASSEREL",
+      "adresse": "Sint-Amandastraat, 83  1853 Strombeek-Bever"
+    },
+    {
+      "nom": "VORTAN (Marteau)",
+      "adresse": "Rue du Marteau, 60  1000 Bruxelles"
+    }
+  ]
+}

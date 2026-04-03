@@ -597,11 +597,11 @@ function doSendCmd(){
   const lignes=Object.entries(ORDER.produits).map(([n,qty])=>({nom:n,qty,livre:false}));
   const htmlEmail=buildEmailHtml(ORDER.client.societe,chantier,chD,nom,date,heure,lignes,autre);
   const email=ORDER.email;
-  // Destinataires : équipe Actif Service + copie au sous-traitant
-  const allDest=[...CFG.destinataires, email];
   Promise.allSettled(
-    allDest.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
-      societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,to_email:to
+    CFG.destinataires.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
+      societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,
+      to_email:to,
+      cc_email:email
     }))
   ).then(results=>{
     btn.disabled=false;btn.textContent='✓ Envoyer';

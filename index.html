@@ -597,13 +597,14 @@ function doSendCmd(){
   const lignes=Object.entries(ORDER.produits).map(([n,qty])=>({nom:n,qty,livre:false}));
   const htmlEmail=buildEmailHtml(ORDER.client.societe,chantier,chD,nom,date,heure,lignes,autre);
   const email=ORDER.email;
-  Promise.allSettled(
-    CFG.destinataires.map(to=>emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
+  // Un seul envoi — les deux destinataires Actif Service en "To", sous-traitant en "Cc"
+  Promise.allSettled([
+    emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
       societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,
-      to_email:to,
+      to_email:CFG.destinataires.join(','),
       cc_email:email
-    }))
-  ).then(results=>{
+    })
+  ]).then(results=>{
     btn.disabled=false;btn.textContent='✓ Envoyer';
     closeModal();
     if(results.some(r=>r.status==='fulfilled')){
@@ -624,8 +625,8 @@ function doSendCmd(){
       const autreEl=document.getElementById('ord-autre');
       const chantierEl=document.getElementById('ord-chantier');
       if(nomEl)nomEl.value='';
-      if(emailEl)emailEl.value='';
-      ORDER.email='';
+      if(emailEl)emailEl.value=ORDER.client.email||'';
+      ORDER.email=ORDER.client.email||'';
       if(autreEl)autreEl.value='';
       if(chantierEl)chantierEl.value='';
       const hint=document.getElementById('ord-hint');

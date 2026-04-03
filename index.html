@@ -249,9 +249,12 @@ const CFG = {
 //  table de correspondance dans ce fichier HTML.
 // ══════════════════════════════════════════════════════════
 const URL_PARAMS = new URLSearchParams(location.search);
-const CLIENT_KEY_FROM_URL = URL_PARAMS.get('client');
-const TOKEN_FROM_URL = URL_PARAMS.get('token');
-const IS_SUBCONTRACTOR = !!CLIENT_KEY_FROM_URL;
+const FULL_CLIENT_PARAM = URL_PARAMS.get('client'); // ex: "Angonet65UUWX"
+const TOKEN_LENGTH = 6;
+// Le token = les 6 derniers caractères, la clé = tout le reste
+const TOKEN_FROM_URL = FULL_CLIENT_PARAM ? FULL_CLIENT_PARAM.slice(-TOKEN_LENGTH) : null;
+const CLIENT_KEY_FROM_URL = FULL_CLIENT_PARAM ? FULL_CLIENT_PARAM.slice(0, -TOKEN_LENGTH) : null;
+const IS_SUBCONTRACTOR = !!FULL_CLIENT_PARAM;
 
 let LOADED_CLIENT = null;
 

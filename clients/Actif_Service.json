@@ -1,10 +1,10 @@
 {
-  "key": "Actif-Service",
+  "key": "Actif_Service",
   "token": "000000",
-  "societe": "Actif-Service",
+  "societe": "Actif_Service",
   "chantiers": [
     {
-      "nom": "Actif-Service Srl",
+      "nom": "Actif_Service",
       "adresse": "Chaussée de Vilvoorde, 80  1120 Neder-Over-Hembeek"
     }
       ],

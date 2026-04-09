@@ -231,7 +231,7 @@ textarea{resize:vertical;min-height:80px;}
 const CFG = {
   emailjsService: "service_kt6gmbs",
   emailjsTemplate: "template_53rynh4",
-  destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"]
+  destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
   adminPwHash: "3c7db50ec99a15da76b2194317372198e7afda93e8894aac8267a8ae595064ee", // SHA-256
   // Liste des clés valides connues (pour l'onglet Admin uniquement)
   // Les données réelles sont dans clients/{key}.json — non exposées dans ce fichier
@@ -654,7 +654,7 @@ function buildEmailHtml(societe,chantier,chD,nom,date,heure,lignes,autre){
   <td style="padding:8px 0;"><b>Société :</b> ${esc(societe)}<br><b>Demandeur :</b> ${esc(nom)}</td>
   <td style="text-align:center;background:#EBF3FC;border-radius:8px;padding:14px;border:3px solid #1B5FA8;">
     <div style="font-size:18px;font-weight:bold;color:#0D3D70;">${esc(chantier)}</div>
-    ${chD&&chD.adresse?`<div style="font-size:15px;color:#475569;margin-top:6px;font-weight:600;">${esc(chD.adresse)}</div>`:''}
+    ${chD&&chD.adresse?`<div style="font-size:11px;color:#475569;margin-top:4px;">${esc(chD.adresse)}</div>`:''}
   </td>
   <td style="text-align:right;padding:8px 0;font-size:12px;color:#64748B;">${date}<br>${heure}</td>
 </tr>

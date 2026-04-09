@@ -1,24 +1,12 @@
 {
-  "key": " Bureau_Actif-Service",
+  "key": "Actif-Service",
   "token": "000000",
-  "societe": " Bureau Actif-Service",
+  "societe": "Actif-Service",
   "chantiers": [
     {
-      "nom": "BANANAS",
-      "adresse": "Schaarbeeklei, 651  1800 Vilvoorde"
-    },
-    {
-      "nom": "EDEN SMILE",
-      "adresse": "Avenue Louise 120 (5ème étage droite)  1050 Ixelles"
-    },
-    {
-      "nom": "ELO",
-      "adresse": "Rue de Trèves, 68  1040 Etterbeek"
-    },
-    {
-      "nom": "KVS",
-      "adresse": "Emmanuellaan, 9  1830 Machelen"
+      "nom": "Actif-Service Srl",
+      "adresse": "Chaussée de Vilvoorde, 80  1120 Neder-Over-Hembeek"
     }
-  ],
+      ],
   "email": "noureddine.ayad@actif-service.be"
 }

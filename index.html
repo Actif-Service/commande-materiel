@@ -605,7 +605,7 @@ function openConfirm(){
     <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:16px;">
       <div style="font-size:13px;color:var(--slate);margin-bottom:8px;font-weight:600;">RÉCAPITULATIF</div>
       <div style="font-size:14px;"><strong>${esc(ORDER.client.societe)}</strong> · ${esc(chantier)}</div>
-      ${chD&&chD.adresse?`<div style="font-size:12px;color:var(--slate);margin-top:3px;">${esc(chD.adresse)}</div>`:''}
+      ${chD&&chD.adresse?`<div style="font-size:14px;font-weight:600;color:#1B5FA8;margin-top:6px;">${esc(chD.adresse)}</div>`:''}
       <div style="font-size:13px;color:var(--slate);margin-top:6px;">Demandeur : ${esc(nom)}</div>
       <div style="font-size:13px;color:var(--slate);margin-top:3px;">Email : ${esc(ORDER.email)}</div>
     </div>

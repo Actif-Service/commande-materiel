@@ -228,30 +228,60 @@ textarea{resize:vertical;min-height:80px;}
 <script>
 (function(){ emailjs.init("UIMYUuF1YijZh1DFI"); })();
 
+// ══════════════════════════════════════════════════════════
+//  JSONBIN CONFIG
+// ══════════════════════════════════════════════════════════
+const JSONBIN = {
+  binId: "69dca74aaaba882197f2aa48",
+  masterKey: "$2a$10$oCJ.KeQujVFNDnTxqTrdVeOcg8MZe9fU8UHFIgzB3tle9HEFmx/k2",
+  baseUrl: "https://api.jsonbin.io/v3/b"
+};
+
+async function jbRead() {
+  try {
+    const resp = await fetch(`${JSONBIN.baseUrl}/${JSONBIN.binId}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN.masterKey }
+    });
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data.record.commandes || [];
+  } catch(e) {
+    console.error('JSONBin read error:', e);
+    return [];
+  }
+}
+
+async function jbWrite(commandes) {
+  try {
+    const resp = await fetch(`${JSONBIN.baseUrl}/${JSONBIN.binId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN.masterKey
+      },
+      body: JSON.stringify({ commandes })
+    });
+    return resp.ok;
+  } catch(e) {
+    console.error('JSONBin write error:', e);
+    return false;
+  }
+}
+
 const CFG = {
   emailjsService: "service_kt6gmbs",
   emailjsTemplate: "template_53rynh4",
   destinataires: ["noureddine.ayad@actif-service.be","brieuc.stas@actif-service.be"],
-  adminPwHash: "3c7db50ec99a15da76b2194317372198e7afda93e8894aac8267a8ae595064ee", // SHA-256
-  // Liste des clés valides connues (pour l'onglet Admin uniquement)
-  // Les données réelles sont dans clients/{key}.json — non exposées dans ce fichier
+  adminPwHash: "3c7db50ec99a15da76b2194317372198e7afda93e8894aac8267a8ae595064ee",
   clientKeys: ["Actif_Service","Angonet","Aquilabell","Be_Clean","Bostanari","Bruno_Clean","Clean_ARO",
     "COM_Invest","Efata_Clean","Fa_Clean","Fan_Construct","Flexy_Net","Garcia",
     "Ghita_Marius","GK_Solutions","Group_Guima","Groupe_SET","LS_Services",
     "OANA","Rose_Group","Top_Clean","Viana_Cleaning"]
 };
 
-// ══════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════
-//  MODE : sous-traitant (?client=xxx&token=yyy)
-//         ou admin (sans paramètres)
-//  Le token est stocké dans le JSON du client — aucune
-//  table de correspondance dans ce fichier HTML.
-// ══════════════════════════════════════════════════════════
 const URL_PARAMS = new URLSearchParams(location.search);
-const FULL_CLIENT_PARAM = URL_PARAMS.get('client'); // ex: "Angonet65UUWX"
+const FULL_CLIENT_PARAM = URL_PARAMS.get('client');
 const TOKEN_LENGTH = 6;
-// Le token = les 6 derniers caractères, la clé = tout le reste
 const TOKEN_FROM_URL = FULL_CLIENT_PARAM ? FULL_CLIENT_PARAM.slice(-TOKEN_LENGTH) : null;
 const CLIENT_KEY_FROM_URL = FULL_CLIENT_PARAM ? FULL_CLIENT_PARAM.slice(0, -TOKEN_LENGTH) : null;
 const IS_SUBCONTRACTOR = !!FULL_CLIENT_PARAM;
@@ -300,10 +330,6 @@ const ALL_PRODUCTS = [
   {id:"p39",nom:"Savon Main Vent de Rose 5 litres",img:"https://actif-service.github.io/commande-materiel/images/Savon_Main_-_Vent_de_Rose_-_5_litres.jpg"}
 ];
 
-// ══════════════════════════════════════════════════════════
-//  CHARGEMENT DYNAMIQUE DU CLIENT DEPUIS SON FICHIER JSON
-//  → seules les données du client concerné sont téléchargées
-// ══════════════════════════════════════════════════════════
 async function loadClient(key) {
   try {
     const resp = await fetch(`clients/${key}.json`);
@@ -314,11 +340,8 @@ async function loadClient(key) {
   }
 }
 
-// Pour l'admin : charge la liste complète des clients (tous les JSON)
 async function loadAllClients() {
-  const results = await Promise.all(
-    CFG.clientKeys.map(k => loadClient(k))
-  );
+  const results = await Promise.all(CFG.clientKeys.map(k => loadClient(k)));
   return results.filter(Boolean);
 }
 
@@ -328,13 +351,25 @@ const LS={
   del:(k)=>{localStorage.removeItem(k);}
 };
 
-function getCommandes(){return LS.get('as_commandes',[]);}
-function saveCommandes(c){LS.set('as_commandes',c);}
 function getChantierProds(ck,cn){return LS.get('acp_'+ck+'_'+encodeURIComponent(cn),null);}
 function setChantierProds(ck,cn,v){LS.set('acp_'+ck+'_'+encodeURIComponent(cn),v);}
 function delChantierProds(ck,cn){LS.del('acp_'+ck+'_'+encodeURIComponent(cn));}
 function isAdminUnlocked(){return sessionStorage.getItem('as_admin')==='1';}
 function unlockAdmin(){sessionStorage.setItem('as_admin','1');}
+
+// Cache local des commandes pour éviter trop d'appels réseau
+let _commandesCache = null;
+
+async function getCommandes() {
+  if (_commandesCache !== null) return _commandesCache;
+  _commandesCache = await jbRead();
+  return _commandesCache;
+}
+
+async function saveCommandes(c) {
+  _commandesCache = c;
+  await jbWrite(c);
+}
 
 const esc=s=>s?String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]):'';
 const fmtDate=iso=>{const d=new Date(iso);return d.toLocaleDateString('fr-BE')+' '+d.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});};
@@ -398,11 +433,12 @@ async function checkAdminPw(){
   }
 }
 
-function updateSuiviBadge(){
+async function updateSuiviBadge(){
   if(IS_SUBCONTRACTOR) return;
   const b=document.getElementById('badge-suivi');
   if(!b) return;
-  const n=getCommandes().filter(c=>c.statut!=='livree').length;
+  const cmds = await getCommandes();
+  const n=cmds.filter(c=>c.statut!=='livree').length;
   b.textContent=n;b.classList.toggle('show',n>0);
 }
 
@@ -417,19 +453,15 @@ async function renderOrder(){
     return;
   }
 
-  // client ou token absent → accès refusé immédiat
   if(!CLIENT_KEY_FROM_URL || !TOKEN_FROM_URL){
     el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Ce lien n'est pas reconnu.<br>Contactez votre responsable Actif Service.</div></div>`;
     return;
   }
 
-  // Afficher un spinner pendant le chargement
   el.innerHTML=`<div class="loading"><div class="spinner"></div>Chargement en cours…</div>`;
 
-  // Charger le JSON du client (contient le token attendu)
   const client = await loadClient(CLIENT_KEY_FROM_URL);
 
-  // JSON introuvable OU token incorrect → accès refusé
   if(!client || client.token !== TOKEN_FROM_URL){
     el.innerHTML=`<div class="empty"><div class="empty-icon">🔗</div><div class="empty-title">Lien invalide</div><div class="empty-sub">Ce lien n'est pas reconnu.<br>Contactez votre responsable Actif Service.</div></div>`;
     return;
@@ -484,7 +516,6 @@ async function renderOrder(){
       </div>
     </div>`;
   updateCartBar();
-  // Pré-remplir l'email depuis le JSON
   const emailEl=document.getElementById('ord-email');
   if(emailEl && ORDER.email) emailEl.value=ORDER.email;
 }
@@ -591,7 +622,7 @@ function openConfirm(){
   openModal('modal-confirm');
 }
 
-function doSendCmd(){
+async function doSendCmd(){
   const{_pendingChantier:chantier,_pendingNom:nom,_pendingAutre:autre,_pendingChD:chD}=ORDER;
   const btn=document.getElementById('modal-send-btn');
   btn.disabled=true;btn.textContent='Envoi...';
@@ -601,50 +632,57 @@ function doSendCmd(){
   const lignes=Object.entries(ORDER.produits).map(([n,qty])=>({nom:n,qty,livre:false}));
   const htmlEmail=buildEmailHtml(ORDER.client.societe,chantier,chD,nom,date,heure,lignes,autre);
   const email=ORDER.email;
-  // Un seul envoi — les deux destinataires Actif Service en "To", sous-traitant en "Cc"
-  Promise.allSettled([
-    emailjs.send(CFG.emailjsService,CFG.emailjsTemplate,{
-      societe:ORDER.client.societe,chantier,nom,commande:htmlEmail,
-      to_email:CFG.destinataires.join(','),
-      cc_email:email
-    })
-  ]).then(results=>{
-    btn.disabled=false;btn.textContent='✓ Envoyer';
-    closeModal();
-    if(results.some(r=>r.status==='fulfilled')){
-      const cmds=getCommandes();
-      cmds.unshift({
-        id:uid(),date:now.toISOString(),
-        societe:ORDER.client.societe,clientKey:ORDER.client.key,
-        chantier,adresse:chD?chD.adresse:'',
-        demandeur:nom,autre:autre||'',
-        lignes,statut:'attente'
-      });
-      saveCommandes(cmds);
-      updateSuiviBadge();
-      showToast('✓ Commande envoyée !');
-      resetQtys();
-      const emailEl=document.getElementById('ord-email');
-      const nomEl=document.getElementById('ord-nom');
-      const autreEl=document.getElementById('ord-autre');
-      const chantierEl=document.getElementById('ord-chantier');
-      if(nomEl)nomEl.value='';
-      if(emailEl)emailEl.value=ORDER.client.email||'';
-      ORDER.email=ORDER.client.email||'';
-      if(autreEl)autreEl.value='';
-      if(chantierEl)chantierEl.value='';
-      const hint=document.getElementById('ord-hint');
-      const prods=document.getElementById('ord-prods');
-      const autreWrap=document.getElementById('ord-autre-wrap');
-      if(hint)hint.style.display='';
-      if(prods)prods.style.display='none';
-      if(autreWrap)autreWrap.style.display='none';
-      ORDER.chantier=null;
-      updateCartBar();
-    }else{
-      showToast("Erreur d'envoi. Vérifiez votre connexion.",true);
-    }
-  });
+
+  const newCmd = {
+    id:uid(),date:now.toISOString(),
+    societe:ORDER.client.societe,clientKey:ORDER.client.key,
+    chantier,adresse:chD?chD.adresse:'',
+    demandeur:nom,autre:autre||'',
+    lignes,statut:'attente'
+  };
+
+  // Envoi email + sauvegarde JSONBin en parallèle
+  const [emailResults, cmdsActuelles] = await Promise.all([
+    Promise.allSettled([
+      emailjs.send(CFG.emailjsService, CFG.emailjsTemplate, {
+        societe: ORDER.client.societe, chantier, nom, commande: htmlEmail,
+        to_email: CFG.destinataires.join(','),
+        cc_email: email
+      })
+    ]),
+    getCommandes()
+  ]);
+
+  btn.disabled=false;btn.textContent='✓ Envoyer';
+  closeModal();
+
+  if(emailResults.some(r=>r.status==='fulfilled')){
+    // Ajouter la nouvelle commande et sauvegarder sur JSONBin
+    const updatedCmds = [newCmd, ...cmdsActuelles];
+    await saveCommandes(updatedCmds);
+    await updateSuiviBadge();
+    showToast('✓ Commande envoyée !');
+    resetQtys();
+    const emailEl=document.getElementById('ord-email');
+    const nomEl=document.getElementById('ord-nom');
+    const autreEl=document.getElementById('ord-autre');
+    const chantierEl=document.getElementById('ord-chantier');
+    if(nomEl)nomEl.value='';
+    if(emailEl)emailEl.value=ORDER.client.email||'';
+    ORDER.email=ORDER.client.email||'';
+    if(autreEl)autreEl.value='';
+    if(chantierEl)chantierEl.value='';
+    const hint=document.getElementById('ord-hint');
+    const prods=document.getElementById('ord-prods');
+    const autreWrap=document.getElementById('ord-autre-wrap');
+    if(hint)hint.style.display='';
+    if(prods)prods.style.display='none';
+    if(autreWrap)autreWrap.style.display='none';
+    ORDER.chantier=null;
+    updateCartBar();
+  } else {
+    showToast("Erreur d'envoi. Vérifiez votre connexion.",true);
+  }
 }
 
 function buildEmailHtml(societe,chantier,chD,nom,date,heure,lignes,autre){
@@ -680,8 +718,12 @@ ${autre?`<p style="margin-top:16px;background:#FEF3E2;padding:12px;border-radius
 // ══════════════════════════════════════════════════════════
 let SF='all',SUIVI_SEARCH='';
 
-function renderSuivi(){
-  const cmds=getCommandes(),el=document.getElementById('pg-suivi');
+async function renderSuivi(){
+  const el=document.getElementById('pg-suivi');
+  el.innerHTML=`<div class="loading"><div class="spinner"></div>Chargement des commandes…</div>`;
+  // Forcer le rechargement depuis JSONBin
+  _commandesCache = null;
+  const cmds = await getCommandes();
   const att=cmds.filter(c=>c.statut==='attente').length;
   const par=cmds.filter(c=>c.statut==='partielle').length;
   const liv=cmds.filter(c=>c.statut==='livree').length;
@@ -752,16 +794,21 @@ function buildCmdRow(c){
   </div>
 </div>`;
 }
+
 function togDet(id){document.getElementById('det_'+id).classList.toggle('open');}
-function togLiv(id,idx,v){
-  const cmds=getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
+
+async function togLiv(id,idx,v){
+  const cmds=await getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
   c.lignes[idx].livre=v;
   const lbl=document.getElementById('cl_'+id+'_'+idx);
   if(lbl){lbl.className='chk-lbl'+(v?' done':'');lbl.querySelector('.lbl-txt').textContent=v?'Livré':'À livrer';}
   const ll=c.lignes.filter(l=>l.livre).length;
   c.statut=ll===0?'attente':ll===c.lignes.length?'livree':'partielle';
-  saveCommandes(cmds);updRowStyle(c,ll);updateSuiviBadge();
+  await saveCommandes(cmds);
+  updRowStyle(c,ll);
+  updateSuiviBadge();
 }
+
 function updRowStyle(c,ll){
   const row=document.getElementById('row_'+c.id);if(!row)return;
   row.className='cmd-row'+(c.statut==='livree'?' done':c.statut==='partielle'?' part':'');
@@ -770,21 +817,39 @@ function updRowStyle(c,ll){
   else if(c.statut==='partielle')pill.innerHTML=`<span class="pill pill-part">${ll}/${c.lignes.length} livrés</span>`;
   else pill.innerHTML=`<span class="pill pill-wait">En attente</span>`;
 }
-function markAll(id){
-  const cmds=getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
+
+async function markAll(id){
+  const cmds=await getCommandes(),c=cmds.find(x=>x.id===id);if(!c)return;
   c.lignes.forEach((l,i)=>{
     l.livre=true;
     const lbl=document.getElementById('cl_'+id+'_'+i);
     if(lbl){lbl.className='chk-lbl done';lbl.querySelector('.lbl-txt').textContent='Livré';lbl.querySelector('input').checked=true;}
   });
-  c.statut='livree';saveCommandes(cmds);updRowStyle(c,c.lignes.length);showToast('✓ Commande livrée');updateSuiviBadge();
+  c.statut='livree';
+  await saveCommandes(cmds);
+  updRowStyle(c,c.lignes.length);
+  showToast('✓ Commande livrée');
+  updateSuiviBadge();
 }
-function delCmd(id){if(!confirm('Supprimer cette commande ?'))return;saveCommandes(getCommandes().filter(c=>c.id!==id));renderSuivi();}
-function clearLiv(){if(!confirm('Supprimer toutes les commandes livrées ?'))return;saveCommandes(getCommandes().filter(c=>c.statut!=='livree'));renderSuivi();}
+
+async function delCmd(id){
+  if(!confirm('Supprimer cette commande ?'))return;
+  const cmds=await getCommandes();
+  await saveCommandes(cmds.filter(c=>c.id!==id));
+  renderSuivi();
+}
+
+async function clearLiv(){
+  if(!confirm('Supprimer toutes les commandes livrées ?'))return;
+  const cmds=await getCommandes();
+  await saveCommandes(cmds.filter(c=>c.statut!=='livree'));
+  renderSuivi();
+}
+
 function setSF(f){SF=f;renderSuivi();}
 
 // ══════════════════════════════════════════════════════════
-//  ADMIN — charge tous les clients dynamiquement
+//  ADMIN
 // ══════════════════════════════════════════════════════════
 let ADM={clients:[],client:null,chantier:null,tab:'clients',selProds:new Set(),loaded:false};
 
@@ -793,7 +858,6 @@ async function renderAdmin(){
   if(ADM.client&&ADM.chantier){renderAdminChantier();return;}
   if(ADM.client){renderAdminClient();return;}
 
-  // Charger tous les clients si pas encore fait
   if(!ADM.loaded){
     el.innerHTML=`<div class="loading"><div class="spinner"></div>Chargement des clients…</div>`;
     ADM.clients = await loadAllClients();
@@ -948,7 +1012,11 @@ function renderAdminProduits(){
       ${ALL_PRODUCTS.map(p=>`<div class="pci on" style="cursor:default;"><span style="font-size:16px;">📦</span><span class="pci-lbl">${esc(p.nom)}</span></div>`).join('')}
     </div>`;
 }
-function renderAdminConfig(){
+
+async function renderAdminConfig(){
+  const cmds = await getCommandes();
+  const el = document.getElementById('pg-admin');
+  // Mettre à jour seulement la partie config si on est sur cet onglet
   return`
     <div class="card">
       <div class="card-title">Destinataires email</div>
@@ -958,23 +1026,33 @@ function renderAdminConfig(){
     </div>
     <div class="card">
       <div class="card-title">Données & Stockage</div>
-      <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">Les données sont stockées localement dans le navigateur (localStorage).</p>
+      <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">Les commandes sont stockées sur <strong>JSONBin.io</strong> et partagées entre tous les appareils.</p>
+      <div style="background:var(--green-light);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--green);margin-bottom:14px;">
+        ✅ <strong>${cmds.length} commande${cmds.length!==1?'s':''}</strong> synchronisée${cmds.length!==1?'s':''} sur JSONBin
+      </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Exporter les données</button>
         <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑 Tout effacer</button>
       </div>
     </div>`;
 }
-function exportData(){
-  const data={commandes:getCommandes(),clients:ADM.clients,exportDate:new Date().toISOString()};
+
+async function exportData(){
+  const cmds = await getCommandes();
+  const data={commandes:cmds,clients:ADM.clients,exportDate:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='actif-service-data-'+new Date().toISOString().slice(0,10)+'.json';a.click();
   showToast('✓ Données exportées');
 }
-function clearAllData(){
-  if(!confirm('Effacer toutes les commandes et configurations ? Cette action est irréversible.'))return;
-  localStorage.clear();showToast('Données effacées');ADM.loaded=false;renderAdmin();
+
+async function clearAllData(){
+  if(!confirm('Effacer toutes les commandes ? Cette action est irréversible.'))return;
+  await saveCommandes([]);
+  localStorage.clear();
+  showToast('Données effacées');
+  ADM.loaded=false;
+  renderAdmin();
 }
 
 // ══════════════════════════════════════════════════════════

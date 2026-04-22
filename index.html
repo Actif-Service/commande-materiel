@@ -513,7 +513,7 @@ async function renderOrder(){
     <div id="ord-autre-wrap" style="display:none;">
       <div class="card">
         <div class="card-title">Autre demande (optionnel)</div>
-        <textarea id="ord-autre" placeholder="Décrivez votre besoin particulier..."></textarea>
+        <textarea id="ord-autre" placeholder="Décrivez votre besoin particulier..." oninput="updateCartBar()"></textarea>
       </div>
     </div>`;
   updateCartBar();
@@ -583,9 +583,15 @@ function resetQtys(){
 function updateCartBar(){
   const total=Object.values(ORDER.produits).reduce((s,v)=>s+v,0);
   const items=Object.keys(ORDER.produits).length;
-  document.getElementById('cart-count').textContent=total;
-  document.getElementById('cart-desc').textContent=items===1?'produit sélectionné':items+' produits, '+total+' unités';
-  document.getElementById('cart-bar').classList.toggle('show',items>0&&!!ORDER.chantier);
+  const autre=(document.getElementById('ord-autre')||{}).value||'';
+  const hasContent = items > 0 || autre.trim().length > 0;
+
+  document.getElementById('cart-count').textContent = items > 0 ? total : '✎';
+  document.getElementById('cart-desc').textContent = items === 0 && autre.trim()
+    ? 'Demande spéciale'
+    : items === 1 ? 'produit sélectionné'
+    : items + ' produits, ' + total + ' unités';
+  document.getElementById('cart-bar').classList.toggle('show', hasContent && !!ORDER.chantier);
 }
 
 function openConfirm(){

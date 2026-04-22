@@ -602,14 +602,14 @@ function openConfirm(){
   const email=document.getElementById('ord-email').value.trim();
   if(!email||!email.includes('@')){showToast('Indiquez votre email',true);return;}
   ORDER.email=email;
-  if(Object.keys(ORDER.produits).length===0){showToast('Sélectionnez au moins un produit',true);return;}
+  const autreEl=document.getElementById('ord-autre');
+  const autre=autreEl ? autreEl.value.trim() : '';
+  if(Object.keys(ORDER.produits).length===0 && !autre){showToast('Sélectionnez au moins un produit ou saisissez une demande',true);return;}
   const lines=Object.entries(ORDER.produits).map(([n,q])=>`
     <tr><td style="padding:8px 12px;border-top:1px solid #E2E8F0;">${esc(n)}</td>
     <td style="padding:8px 12px;border-top:1px solid #E2E8F0;text-align:center;font-weight:700;">${q}</td></tr>`).join('');
   const chD=ORDER.client.chantiers.find(c=>c.nom===chantier);
-  const autreEl=document.getElementById('ord-autre');
-const autre=autreEl ? autreEl.value.trim() : '';
-  document.getElementById('modal-body').innerHTML=`
+    document.getElementById('modal-body').innerHTML=`
     <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:16px;">
       <div style="font-size:13px;color:var(--slate);margin-bottom:8px;font-weight:600;">RÉCAPITULATIF</div>
       <div style="font-size:14px;"><strong>${esc(ORDER.client.societe)}</strong> · ${esc(chantier)}</div>

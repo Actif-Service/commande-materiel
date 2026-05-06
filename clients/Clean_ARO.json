@@ -32,10 +32,6 @@
       "adresse": "Avenue Louise, 106  1050 Ixelles"
     },
     {
-      "nom": "Louise 120 (communs)",
-      "adresse": "Avenue Louise, 120  1050 Ixelles"
-    },
-    {
       "nom": "SAS SPB",
       "adresse": "Avenue Louise, 120  1050 Ixelles"
     },
@@ -70,11 +66,7 @@
     {
       "nom": "FIRST LAW",
       "adresse": "Avenue Louise, 480  1050 Ixelles"
-    },
-    {
-      "nom": "COOP. EQUATEUR",
-      "adresse": "Rue de l'Equateur, 47/4  1180 Uccle"
     }
-  ],
+      ],
   "email": "monica.garcia@clean-aro-invest.com"
 }

@@ -1,0 +1,28 @@
+{
+  "key": "Ivania",
+  "token": "75WXTT",
+  "societe": "Ivania",
+  "chantiers": [
+    {
+      "nom": "AMBIANCE CUISINE",
+      "adresse": "Chaussée de Waterloo, 1138   1180 Uccle"
+    },
+    {
+      "nom": "FICOGES",
+      "adresse": "Boulevard Sylvain Dupuis, 213  1070 Anderlecht"
+    },
+    {
+      "nom": "HOUSSIAU",
+      "adresse": "Drèves des Renards, 6  1180 Uccle"
+    },
+    {
+      "nom": "MICHEL FORGES",
+      "adresse": "Drèves des Renards, 6  1180 Uccle"
+    },
+    {
+      "nom": "VORTAN - Rue du NID",
+      "adresse": "Rue du Nid, 15  1050 Ixelles"
+    }
+  ],
+  "email": "ivanialopes85@gmail.com"
+}

@@ -16,14 +16,6 @@
       "adresse": "Rodepoortstraat, 55  1853 Strombeek-Bever"
     },
     {
-      "nom": "AMBIANCE CUISINE",
-      "adresse": "Chaussée de Waterloo, 1138  1180 Uccle"
-    },
-    {
-      "nom": "AP & FICOGES",
-      "adresse": "Boulevard Sylvain Dupuis, 213  1070 Anderlecht"
-    },
-    {
       "nom": "CALLE ALTA",
       "adresse": "Rue Haute, 195  1000 Bruxelles"
     },
@@ -38,10 +30,6 @@
     {
       "nom": "ECORYS",
       "adresse": "Avenue des Arts, 46  1000 Bruxelles"
-    },
-    {
-      "nom": "FORGES MICHEL Avocat",
-      "adresse": "Drève des Renards 4/29  1180 Uccle"
     },
     {
       "nom": "NICKEL",
@@ -66,11 +54,7 @@
     {
       "nom": "VME PHILIPPE LE BON",
       "adresse": "Kasteelstraat, 33  1853 Strombeek-Bever"
-    },
-    {
-      "nom": "VORTAN - Rue du NID",
-      "adresse": "Rue du Nid, 15  1050 Ixelles"
     }
-  ],
+      ],
   "email": "groupguima@outlook.com"
 }

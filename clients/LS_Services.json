@@ -14,6 +14,22 @@
     {
       "nom": "EUROPABIO",
       "adresse": "Avenue des Arts, 53  1000 Bruxelles"
+    },
+    {
+      "nom": "LEE - Les Entreprises ESMER",
+      "adresse": "Rue des Anciens Etangs, 48  11190 Forest"
+    },
+    {
+      "nom": "KANTAR INSIGHTS",
+      "adresse": "Boulevard Saint Lazare, 4  1210 Saint-Josse-ten-Noode"
+    },
+    {
+      "nom": "PROJECT DISTRIBUTION",
+      "adresse": "Rue Bollinckx, 254  1070 Anderlecht"
+    },
+    {
+      "nom": "TURBEL",
+      "adresse": "Rue du Bassin Collecteur, 11  1130 Haren"
     }
   ],
   "email": "schepens.julie@hotmail.com"

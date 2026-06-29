@@ -3,11 +3,7 @@
   "token": "eFNfJX",
   "societe": "Top Clean",
   "chantiers": [
-    {
-      "nom": "KANTAR INSIGHTS",
-      "adresse": "Boulevard Saint-Lazard, 4  1210 Saint-Josse-ten-Noode"
-    },
-    {
+        {
       "nom": "METAL PACKAGING",
       "adresse": "Rue de Trèves, 59-61  1040 Etterbeek"
     },

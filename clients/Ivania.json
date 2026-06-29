@@ -22,13 +22,19 @@
     {
       "nom": "VORTAN - Rue du NID",
       "adresse": "Rue du Nid, 15  1050 Ixelles"
-    },
-    
+    }, 
+    {
+      "nom": "VORTAN - Rue du NID",
+      "adresse": "Rue du Nid, 15  1050 Ixelles"
+    }, 
+    {
+      "nom": "AKROPOLIS",
+      "adresse": "Luitberg,  25  1853 Strombeek-Bever"
+    }
     {
       "nom": "ASTRONOMIE",
-      "adresse": "Avenue de l'Astronomie, 9  1210 Saint-Josse-ten-Noode"
-    }
-    
+      "adresse": "avenue de l'Astronomie, 9  1210 Saint-Josse-ten-Noode"
+    }, 
   ],
   "email": "ivanialopes85@gmail.com"
 }

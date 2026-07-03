@@ -12,17 +12,13 @@
       "adresse": "Boulevard Sylvain Dupuis, 213  1070 Anderlecht"
     },
     {
-      "nom": "HOUSSIAU",
+      "nom": "HOUSSIAU NICOLAS",
       "adresse": "Drèves des Renards, 6  1180 Uccle"
     },
     {
       "nom": "MICHEL FORGES",
-      "adresse": "Drèves des Renards, 6  1180 Uccle"
+      "adresse": "Drèves des Renards, 4  1180 Uccle"
     },
-    {
-      "nom": "VORTAN - Rue du NID",
-      "adresse": "Rue du Nid, 15  1050 Ixelles"
-    }, 
     {
       "nom": "VORTAN - Rue du NID",
       "adresse": "Rue du Nid, 15  1050 Ixelles"
@@ -30,11 +26,11 @@
     {
       "nom": "AKROPOLIS",
       "adresse": "Luitberg,  25  1853 Strombeek-Bever"
-    }
+    },
     {
       "nom": "ASTRONOMIE",
       "adresse": "avenue de l'Astronomie, 9  1210 Saint-Josse-ten-Noode"
-    }, 
+    }
   ],
   "email": "ivanialopes85@gmail.com"
 }
